@@ -28,8 +28,9 @@ COMMIT="$(git rev-parse HEAD)"
 pnpm install --frozen-lockfile
 filters=()
 for p in "${PACKAGES[@]}"; do filters+=(--filter "./packages/$p..."); done
-# Two builds at a time: one transformer dts build peaks around 1.8 GB RSS.
-pnpm -r --workspace-concurrency=2 "${filters[@]}" build
+# Two builds at a time by default: one transformer dts build peaks around
+# 1.8 GB RSS. PACK_CONCURRENCY=1 keeps the whole build under ~2 GB.
+pnpm -r --workspace-concurrency="${PACK_CONCURRENCY:-2}" "${filters[@]}" build
 
 # Tarball names carry the commit (typesugar-core-0.1.1-<sha>.tgz): pnpm keys
 # a file: dependency's store entry on the lockfile's integrity hash, so a

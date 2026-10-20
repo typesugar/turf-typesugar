@@ -1,0 +1,158 @@
+--- stage-0/packages/turf-helpers/dist/esm/index.js
++++ stage-1/packages/turf-helpers/dist/esm/index.js
+@@ -106,19 +106,14 @@
+   return feature(geom, properties, options);
+ }
+ function points(coordinates, properties, options = {}) {
+-  return featureCollection(
+-    coordinates.map((coords) => {
+-      return point(coords, properties);
+-    }),
+-    options
+-  );
++  return featureCollection(coordinates.map((coords) => {
++    return point(coords, properties);
++  }), options);
+ }
+ function polygon(coordinates, properties, options = {}) {
+   for (const ring of coordinates) {
+     if (ring.length < 4) {
+-      throw new Error(
+-        "Each LinearRing of a Polygon must have 4 or more Positions."
+-      );
++      throw new Error("Each LinearRing of a Polygon must have 4 or more Positions.");
+     }
+     if (ring[ring.length - 1].length !== ring[0].length) {
+       throw new Error("First and last Position are not equivalent.");
+@@ -136,12 +131,9 @@
+   return feature(geom, properties, options);
+ }
+ function polygons(coordinates, properties, options = {}) {
+-  return featureCollection(
+-    coordinates.map((coords) => {
+-      return polygon(coords, properties);
+-    }),
+-    options
+-  );
++  return featureCollection(coordinates.map((coords) => {
++    return polygon(coords, properties);
++  }), options);
+ }
+ function lineString(coordinates, properties, options = {}) {
+   if (coordinates.length < 2) {
+@@ -154,12 +146,9 @@
+   return feature(geom, properties, options);
+ }
+ function lineStrings(coordinates, properties, options = {}) {
+-  return featureCollection(
+-    coordinates.map((coords) => {
+-      return lineString(coords, properties);
+-    }),
+-    options
+-  );
++  return featureCollection(coordinates.map((coords) => {
++    return lineString(coords, properties);
++  }), options);
+ }
+ function featureCollection(features, options = {}) {
+   const fc = { type: "FeatureCollection" };
+@@ -277,7 +266,8 @@
+ function removeBbox(geojson) {
+   delete geojson.bbox;
+   if (geojson.type === "Feature") {
+-    if (geojson.geometry) removeBbox(geojson.geometry);
++    if (geojson.geometry)
++      removeBbox(geojson.geometry);
+   } else if (geojson.type === "FeatureCollection") {
+     geojson.features.forEach(removeBbox);
+   } else if (geojson.type === "GeometryCollection") {
+@@ -304,7 +294,9 @@
+   if (!id) {
+     throw new Error("id is required");
+   }
+-  if (["string", "number"].indexOf(typeof id) === -1) {
++  if (!/* @__PURE__ */ ((value) => {
++    return typeof value === "string" || typeof value === "number";
++  })(id)) {
+     throw new Error("id must be a number or a string");
+   }
+ }
+--- stage-0/packages/turf-helpers/dist/cjs/index.cjs
++++ stage-1/packages/turf-helpers/dist/cjs/index.cjs
+@@ -106,19 +106,14 @@
+   return feature(geom, properties, options);
+ }
+ function points(coordinates, properties, options = {}) {
+-  return featureCollection(
+-    coordinates.map((coords) => {
+-      return point(coords, properties);
+-    }),
+-    options
+-  );
++  return featureCollection(coordinates.map((coords) => {
++    return point(coords, properties);
++  }), options);
+ }
+ function polygon(coordinates, properties, options = {}) {
+   for (const ring of coordinates) {
+     if (ring.length < 4) {
+-      throw new Error(
+-        "Each LinearRing of a Polygon must have 4 or more Positions."
+-      );
++      throw new Error("Each LinearRing of a Polygon must have 4 or more Positions.");
+     }
+     if (ring[ring.length - 1].length !== ring[0].length) {
+       throw new Error("First and last Position are not equivalent.");
+@@ -136,12 +131,9 @@
+   return feature(geom, properties, options);
+ }
+ function polygons(coordinates, properties, options = {}) {
+-  return featureCollection(
+-    coordinates.map((coords) => {
+-      return polygon(coords, properties);
+-    }),
+-    options
+-  );
++  return featureCollection(coordinates.map((coords) => {
++    return polygon(coords, properties);
++  }), options);
+ }
+ function lineString(coordinates, properties, options = {}) {
+   if (coordinates.length < 2) {
+@@ -154,12 +146,9 @@
+   return feature(geom, properties, options);
+ }
+ function lineStrings(coordinates, properties, options = {}) {
+-  return featureCollection(
+-    coordinates.map((coords) => {
+-      return lineString(coords, properties);
+-    }),
+-    options
+-  );
++  return featureCollection(coordinates.map((coords) => {
++    return lineString(coords, properties);
++  }), options);
+ }
+ function featureCollection(features, options = {}) {
+   const fc = { type: "FeatureCollection" };
+@@ -277,7 +266,8 @@
+ function removeBbox(geojson) {
+   delete geojson.bbox;
+   if (geojson.type === "Feature") {
+-    if (geojson.geometry) removeBbox(geojson.geometry);
++    if (geojson.geometry)
++      removeBbox(geojson.geometry);
+   } else if (geojson.type === "FeatureCollection") {
+     geojson.features.forEach(removeBbox);
+   } else if (geojson.type === "GeometryCollection") {
+@@ -304,7 +294,9 @@
+   if (!id) {
+     throw new Error("id is required");
+   }
+-  if (["string", "number"].indexOf(typeof id) === -1) {
++  if (!/* @__PURE__ */ ((value) => {
++    return typeof value === "string" || typeof value === "number";
++  })(id)) {
+     throw new Error("id must be a number or a string");
+   }
+ }

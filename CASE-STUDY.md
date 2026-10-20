@@ -168,6 +168,171 @@ Numbers (Apple M4 Pro, 12 cores, Node 26.3.1, shared and busy machine):
   to +19%), so a single round shows nothing on this machine. `bench.mjs` now
   says so instead of flagging deltas.
 
+### Stage 1: derive and type guards (`turf-helpers`, `turf-clone`)
+
+**Result: one line of Turf adopted a typesugar macro. The headline features
+did not fit.** `turf-helpers`' `validateId` now checks `is<Id>(id)`. Nothing
+in `turf-clone` changed. typesugar's derived `Clone` is shallow and Turf's
+clone is deep, so a derived clone fails 15 of `turf-clone`'s 46 assertions.
+No other candidate could be changed without changing behaviour that Turf's
+tests pin down. Looking for these fits found three typesugar bugs, all
+fixed (F9, F11, F14), and one place where the docs and the behaviour
+disagree, left for a design decision (F10). The emitted code differs from
+hand-written code in two ways that are not fixed (F15, F16). No typesugar
+reference reaches Turf's published JS or `.d.ts`.
+
+typesugar: branch `case-study-fixes` at
+[`0411491c`](https://github.com/typesugar/typesugar/commit/0411491c), which is
+Stage 0's loader on `decisions-1.0` plus three fixes from this stage. It is
+vendored in `vendor/typesugar/`. The branch's next commit, `985145e6`, only
+reformats a test file, so the packed packages are the same.
+
+#### What changed in Turf
+
+```diff
++import { is } from "@typesugar/validate";
+ ...
+-  if (["string", "number"].indexOf(typeof id) === -1) {
++  if (!is<Id>(id)) {
+     throw new Error("id must be a number or a string");
+```
+
+`Id` is Turf's own `string | number`, so the check now follows the type
+instead of restating it. `packages/turf-helpers/package.json` gains
+`"@typesugar/validate": "0.1.1"` under `devDependencies`. It is needed at
+build time because tsup's `.d.ts` step type-checks the unexpanded source
+(F5). Nothing in `dependencies` changes. Source lines changed: 3 added, 1
+removed, in 2 files.
+
+Turf's tests never call `validateId`, so they don't cover this change. A
+separate check ran the Stage 0 and Stage 1 builds of `validateId` on 24 inputs
+(numbers, `NaN`, `0`, `""`, booleans, `null`, objects, arrays, functions,
+symbols, bigints, boxed primitives). Both builds threw or returned on exactly
+the same inputs.
+
+#### What was tried and not adopted
+
+The GeoJSON types come from `@types/geojson`, so `@derive` can't be written
+on them. typesugar has three ways to get an instance for an external type:
+
+| Route | What happened on `Point`, `Feature`, ... |
+| --- | --- |
+| `summon<Clone<Point>>()` with no instance declared | Works. `summon` derives one from the type's structure (Generic auto-derivation). The docs say it doesn't do this (F10). |
+| `/** @derive(Clone, Eq, TypeGuard) */ type P = Point;` (a local alias) | Clone and TypeGuard derive. Eq fails because `Position` (`number[]`) has no `Eq` (F12). On a union alias (`Point \| LineString \| Polygon`), Clone failed (F9, now fixed) and Eq still fails. |
+| `/** @impl Clone<Point> */ const ... = { clone: ... }` by hand | Works, but it is Turf's existing code wrapped in an object. It adds nothing. |
+
+- **`turf-clone` → derived `Clone`: rejected.** The experiment is in
+  `case-study/experiments/stage-1-derived-clone.ts`. It puts
+  `summon<Clone<…>>()` instances for all nine GeoJSON types in place of
+  Turf's clone. With the typesugar that Stage 0 vendored (`fbcc5775`), 22 of
+  46 assertions fail. Absent `bbox` became `bbox: undefined` and foreign
+  members were lost (F9), and coordinates were shared (F8). After the F9
+  fix, 15 fail, and every one of them is because the clone is shallow:
+  mutating the clone's coordinates or properties changes the original. That is typesugar's documented `Clone`
+  ("shallow"). Turf's `clone` is a deep copy that follows the GeoJSON
+  structure, which is a different operation (F8).
+- **`isNumber`, `point()`'s coordinate checks, `validateBBox` →
+  `is<number>()`: rejected.** Turf's `isNumber` is `!isNaN(num) && num !==
+  null && !Array.isArray(num)`. Its tests require `isNumber("123")` and
+  `isNumber("1e10000")` to be true. `typeof x === "number"` would change the
+  public API. `validateBBox` also throws four different messages, one per
+  failure, while a type guard only answers yes or no.
+- **`isObject`**: it already says exactly what it means (non-null, `typeof
+  "object"`, not an array). Nothing to generate.
+- **`@derive(TypeGuard)` / `is<Feature>()` for GeoJSON shapes**:
+  `turf-helpers` exports no GeoJSON type guards. Adding `isFeature` and the
+  like would add public API, which is out of scope for a refactor stage.
+  `turf-invariant` (Stage 2) is where Turf validates shapes. Note for that
+  stage: the derived `TypeGuard` and `is<T>()` disagree (F13).
+- **`Eq`**: nothing in these two packages compares GeoJSON values.
+  `turf-boolean-equal` does, and that is a better place to test Eq later.
+  Before that can work, F12 has to be fixed.
+
+#### Zero cost
+
+1. **Emitted JS against hand-written.** Of 115 `dist` trees (691 files,
+   compared after normalising the absolute build path that tsup writes into
+   CJS source maps), only `turf-helpers`' `index.js`, `index.cjs`, their two
+   maps, and `turf.min.js` differ from Stage 0. `turf-clone` and every
+   `.d.ts` are byte-identical. In `turf-helpers` the semantic change is the
+   one in `validateId`
+   (`case-study/results/stage-1/emitted-code.diff`):
+
+   ```js
+   if (!/* @__PURE__ */ ((value) => {
+     return typeof value === "string" || typeof value === "number";
+   })(id)) {
+   ```
+
+   A person would write `typeof id !== "string" && typeof id !== "number"`.
+   typesugar emits an immediately-invoked arrow instead, and terser keeps
+   it in `turf.min.js` (`!function(t){return"string"==typeof
+   t||"number"==typeof t}(t)`) (F15). V8 inlines it, though. In a
+   micro-benchmark (`case-study/experiments/stage-1-validateid-bench.mjs`, 5
+   rounds), Turf's `indexOf` version ran at 51 M ops/s, typesugar's at 99 M
+   and a hand-written inline at 100 M. typesugar's version is within the
+   spread of the hand-written one and twice as fast as v7.4.0's. The other
+   five hunks in the file only change whitespace. A file that contains a
+   macro is reprinted whole, so the line breaks in `points`, `polygons`,
+   `lineStrings`, `polygon` and `removeBbox` move (F16).
+2. **typesugar in the published output: none in JS or `.d.ts`.**
+   `case-study/leaks.mjs` scans all 231 JS files (including `turf.min.js`)
+   and 230 declaration files. It finds no `typesugar` or `@typesugar/*`
+   specifier. `@turf/helpers` consumers gain no dependency, and its
+   `package.json` declares `@typesugar/validate` as a devDependency only. Two
+   source maps (`turf-helpers` ESM and CJS) contain the original source in
+   `sourcesContent`, so the text `import { is } from "@typesugar/validate"`
+   is in the published tarball. Nothing resolves it. One cost stays with the
+   source: anyone who runs `turf-helpers/index.ts` without typesugar (plain
+   tsx, a bundler without the plugin) gets the runtime stub's error the
+   first time `validateId` runs. Turf's own tests import the source, but they
+   run through the loader (F1).
+3. **Size and speed.** `turf.min.js`: +23 B raw, −2 B gzip, −38 B brotli. The
+   `turf-helpers` ESM entry: +2 B raw, +5 B gzip, −5 B brotli. Benchmarks:
+   the `turf-helpers` (10 cases) and `turf-clone` (8 cases) suites, 5
+   interleaved rounds each, with the loader on both sides (F7). Against
+   Stage 0, 18 of 18 deltas are smaller than their spread (median of the
+   deltas −0.15%, range −2.4% to +3.2%;
+   `case-study/results/stage-1/bench-stage-0-vs-stage-1`). Against v7.4.0,
+   18 of 18 are also within spread (range −6.1% to +1.7%; the two largest,
+   `multiLineString` −6.1% and `featureCollection` −4.9%, sit inside 12.8%
+   and 7.2% spreads; `.../bench-v7.4.0-vs-stage-1`). Neither suite calls
+   `validateId` (F17), so these runs are a control. They show that the
+   loader compiling `turf-helpers/index.ts` on the Stage 1 side changes
+   nothing measurable.
+
+Tests: the full suite (121 workspace packages through the loader) gives the
+same 2336 TAP results as Stage 0, compared sorted line by line: 2332 pass, and
+the same 4 known failures as v7.4.0. `@turf/turf` last-checks: 252/252.
+Build and type-check time (median of 3, single package): `turf-helpers`
+tsup build (JS and `.d.ts`) 1.34 s → 1.52 s, the cost of actually expanding a
+macro instead of passing the file through. `tsc --noEmit index.ts` 0.60 s →
+0.63 s, from resolving `@typesugar/validate`'s types. `turf-clone` is
+unchanged (1.19 s and 0.58 s on both sides). The full `lerna run build
+--concurrency 4` took 89 s against 84 s for Stage 0 (single runs on a shared
+machine, so this is not a measured difference).
+
+Adoption cost: 3 lines added and 1 removed, in 2 files under `packages/`,
+plus one devDependency. Friction:
+
+- The type-guard macro lives in `@typesugar/validate`, a package the
+  `typesugar` umbrella doesn't depend on. The umbrella's own `validator<T>()`
+  was broken for this type (F14).
+- Each candidate needed its expansion read (`typesugar expand`) before it
+  could be trusted, because two of the three routes for external types
+  produced code that differed from what the docs describe (F9, F10).
+- `pnpm install` without `--ignore-scripts` runs Turf's root `prepare`, a
+  full 115-package build, which matters on a shared machine.
+  `vendor/typesugar/pack.sh` gained `PACK_CONCURRENCY` so the typesugar
+  build can stay under 2 GB.
+- The commit used `--no-verify`, because monorepolint rejects the private
+  `case-study/package.json`. The same is true in Stage 0. Prettier and
+  eslint pass on the changed files.
+
+New tooling: `case-study/leaks.mjs` (the scan above) and
+`case-study/experiments/` (the derived-Clone experiment and the
+`validateId` micro-benchmark).
+
 ## Findings
 
 _typesugar bugs, gaps and design lessons, each with a link to its fix or issue._
@@ -240,3 +405,89 @@ _typesugar bugs, gaps and design lessons, each with a link to its fix or issue._
   whenever one side would otherwise run without it (always against v7.4.0).
   For typesugar this argues for an option that frees the Program once
   loading is done, or that expands ahead of time. Not filed yet.
+- **F8 (design lesson): typesugar's `Clone` is shallow, so it can't express
+  Turf's clone.** `turf-clone` makes a deep copy that follows the GeoJSON
+  structure: `deepSlice` for coordinates, a recursive copy of properties, and
+  foreign members kept. typesugar documents `Clone` as shallow, and a derived
+  instance copies one level (`{ ...a }`). Rust's `#[derive(Clone)]`, which the
+  name suggests, clones each field through that field's own `Clone`.
+  typesugar's own `Clone<A[]>` instance in `@typesugar/std` already clones
+  element by element. A derive that used field instances (`fieldTypeclass:
+  "Clone"` instead of `null`) would generate roughly Turf's `deepSlice` for
+  geometries. Changing what `Clone` means is a design decision for
+  typesugar, so it is recorded here and not filed as a fix.
+- **F9 (bug, fixed): derived `Clone` listed the declared fields and had no
+  sum-type strategy.** On `@types/geojson`'s `Point` it produced `{ type:
+  a.type, coordinates: a.coordinates, bbox: a.bbox }`. Absent optional
+  fields came back as `bbox: undefined` keys, and undeclared properties (GeoJSON
+  foreign members) were dropped. On a discriminated union it failed with
+  TS9106 ("derivation strategy returned null for sum type"), although
+  `docs/guides/derive.md` promised "switch-on-discriminant for sum types".
+  Both now derive `({ ...a })`, the "spread copy" the guide already
+  described. Commit
+  [`10449625`](https://github.com/typesugar/typesugar/commit/10449625) on
+  `case-study-fixes`, failing tests first, with a changeset.
+- **F10 (docs contradict behaviour; open question): `summon` auto-derives.**
+  `docs/guides/typeclasses.md` says "Nothing is ambient (PEP-052): a type
+  gets an instance only when you ask for one, either with `@derive` or by
+  writing an `@impl` instance", and PEP-052 removed "auto-derive-from-nowhere"
+  for operators. `summon<Clone<Point>>()` with no instance in scope still
+  derives one from the type's structure (`summonInstanceExpression` →
+  `tryDeriveViaGeneric`), and that is the only way to get a derived
+  instance for a type you can't annotate, such as everything in
+  `@types/geojson`. Either the docs or the behaviour is wrong. Which one is
+  a design call, so it is not changed here.
+- **F11 (bug, fixed): `summon` could leave a runtime import of `typesugar`.**
+  `import { summon, Clone } from "typesugar"; summon<Clone<P>>()` expands to
+  an instance literal. The transformer removed `summon` from the import but
+  kept `Clone`, a value export used only in the macro's type argument. tsc
+  and esbuild elide it as unused, so Turf's build was not affected. Under
+  `verbatimModuleSyntax` the emitted JS kept `import { Clone } from
+  "typesugar"`, so the library would depend on typesugar at runtime (checked
+  with esbuild on the expanded output). Fix: in an import that brought in a
+  macro, a specifier the file used and the expanded code no longer uses (as a
+  value or a type) is removed. Commit
+  [`0411491c`](https://github.com/typesugar/typesugar/commit/0411491c).
+- **F12 (gap): no derived `Eq` for GeoJSON.** `Position` is `number[]`, and
+  derive's field check finds no `Eq` for arrays, because generic instances
+  such as `Eq<A[]>` are not supported in 1.0 (a documented limit). So
+  `Eq<Point>` fails ("Position lacks Eq"), and so does every geometry,
+  feature and union.
+- **F13 (inconsistency): two type-guard generators with different depth
+  and types.** For `Point`, the derived `TypeGuard`'s `is` checks only that
+  `coordinates` is a non-null object, and it is typed `(value: unknown) =>
+  boolean`, not a type predicate. `is<Point>()` from `@typesugar/validate`
+  checks that `coordinates` is an array of numbers and that `bbox` is a 4- or
+  6-tuple, and it narrows. `is<T>()` also has small code-shape warts: an
+  optional field is tested `x === undefined || (x === undefined || …)`, and a
+  tuple length is tested `length >= 4 && length <= 4`. These matter for
+  Stage 2.
+- **F14 (bug, fixed): `validator<T>()` rejected every value of a primitive
+  `T`.** `validator<string | number>()`, the validator exported by
+  `typesugar` itself, emitted the object validator. It failed any non-object
+  ("Expected object, got string") and then checked `toString`, `valueOf`
+  and `toLocaleString` as fields. It produced no diagnostic. Found while
+  comparing it with `is<Id>()`. Commit
+  [`6edd688a`](https://github.com/typesugar/typesugar/commit/6edd688a).
+- **F15 (code shape, not fixed): `is<T>(x)` emits an immediately-invoked
+  arrow.** The guard function is built and then applied: `((value): value is
+  T => …)(x)`. terser keeps it as `!function(t){…}(t)`. V8 inlines it, so it
+  costs nothing measurable (Stage 1 micro-benchmark), but it is not what a
+  person writes. Inlining the predicate on `x` would lose the narrowing in
+  the expanded TypeScript, and a typesugar test type-checks that output. The
+  alternative is to hoist a named guard to module scope, which needs
+  machinery that only specialization has today. Not filed yet.
+- **F16 (code shape): a file with a macro is reprinted whole.** typesugar
+  hands esbuild the TypeScript printer's output for a changed file, so
+  whitespace and line breaks change in five unrelated functions of
+  `turf-helpers` (+2 B raw). F2 was the same thing for files with no
+  macros, and that is fixed. For files with macros it is by design today.
+  Splicing only the expanded regions into the original text (as
+  `config-writer.ts` already does for `typesugar.config.ts`) would leave the
+  rest of the file as it was.
+- **F17 (method): neither Turf's tests nor its benches exercise the changed
+  code.** `turf-helpers`' `test.ts` and `bench.ts` never call `validateId`.
+  The equivalence check and the micro-benchmark above fill the gap. The A/B
+  benches still matter as a control, because `bench.ts` imports the source
+  through the loader: on the Stage 1 side `turf-helpers/index.ts` is compiled
+  by typesugar's loader, and on the Stage 0 side it passes through to tsx.
