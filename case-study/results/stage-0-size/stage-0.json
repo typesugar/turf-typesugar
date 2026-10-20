@@ -1,0 +1,591 @@
+{
+  "root": ".",
+  "date": "2026-10-20T12:49:15.337Z",
+  "files": {
+    "turf/turf.min.js": {
+      "raw": 547400,
+      "gzip": 141924,
+      "brotli": 118144
+    },
+    "turf/dist/esm/index.js": {
+      "raw": 7409,
+      "gzip": 1695,
+      "brotli": 1555
+    },
+    "turf-along/dist/esm/index.js": {
+      "raw": 1136,
+      "gzip": 476,
+      "brotli": 401
+    },
+    "turf-angle/dist/esm/index.js": {
+      "raw": 1106,
+      "gzip": 432,
+      "brotli": 390
+    },
+    "turf-area/dist/esm/index.js": {
+      "raw": 1663,
+      "gzip": 653,
+      "brotli": 558
+    },
+    "turf-bbox/dist/esm/index.js": {
+      "raw": 670,
+      "gzip": 320,
+      "brotli": 269
+    },
+    "turf-bbox-clip/dist/esm/index.js": {
+      "raw": 3731,
+      "gzip": 1220,
+      "brotli": 1083
+    },
+    "turf-bbox-polygon/dist/esm/index.js": {
+      "raw": 738,
+      "gzip": 375,
+      "brotli": 316
+    },
+    "turf-bearing/dist/esm/index.js": {
+      "raw": 994,
+      "gzip": 424,
+      "brotli": 375
+    },
+    "turf-bezier-spline/dist/esm/index.js": {
+      "raw": 4938,
+      "gzip": 1494,
+      "brotli": 1298
+    },
+    "turf-boolean-clockwise/dist/esm/index.js": {
+      "raw": 463,
+      "gzip": 290,
+      "brotli": 249
+    },
+    "turf-boolean-concave/dist/esm/index.js": {
+      "raw": 858,
+      "gzip": 386,
+      "brotli": 324
+    },
+    "turf-boolean-contains/dist/esm/index.js": {
+      "raw": 11710,
+      "gzip": 2337,
+      "brotli": 2100
+    },
+    "turf-boolean-crosses/dist/esm/index.js": {
+      "raw": 5027,
+      "gzip": 1133,
+      "brotli": 1022
+    },
+    "turf-boolean-disjoint/dist/esm/index.js": {
+      "raw": 4527,
+      "gzip": 1023,
+      "brotli": 909
+    },
+    "turf-boolean-equal/dist/esm/index.js": {
+      "raw": 807,
+      "gzip": 404,
+      "brotli": 342
+    },
+    "turf-boolean-intersects/dist/esm/index.js": {
+      "raw": 372,
+      "gzip": 222,
+      "brotli": 197
+    },
+    "turf-boolean-overlap/dist/esm/index.js": {
+      "raw": 1985,
+      "gzip": 666,
+      "brotli": 578
+    },
+    "turf-boolean-parallel/dist/esm/index.js": {
+      "raw": 1568,
+      "gzip": 598,
+      "brotli": 526
+    },
+    "turf-boolean-point-in-polygon/dist/esm/index.js": {
+      "raw": 1033,
+      "gzip": 493,
+      "brotli": 456
+    },
+    "turf-boolean-point-on-line/dist/esm/index.js": {
+      "raw": 2586,
+      "gzip": 742,
+      "brotli": 658
+    },
+    "turf-boolean-touches/dist/esm/index.js": {
+      "raw": 24412,
+      "gzip": 1581,
+      "brotli": 1360
+    },
+    "turf-boolean-valid/dist/esm/index.js": {
+      "raw": 3594,
+      "gzip": 1000,
+      "brotli": 879
+    },
+    "turf-boolean-within/dist/esm/index.js": {
+      "raw": 287,
+      "gzip": 191,
+      "brotli": 148
+    },
+    "turf-buffer/dist/esm/index.js": {
+      "raw": 3510,
+      "gzip": 1056,
+      "brotli": 918
+    },
+    "turf-center/dist/esm/index.js": {
+      "raw": 391,
+      "gzip": 249,
+      "brotli": 224
+    },
+    "turf-center-mean/dist/esm/index.js": {
+      "raw": 975,
+      "gzip": 448,
+      "brotli": 381
+    },
+    "turf-center-median/dist/esm/index.js": {
+      "raw": 2814,
+      "gzip": 926,
+      "brotli": 806
+    },
+    "turf-center-of-mass/dist/esm/index.js": {
+      "raw": 1803,
+      "gzip": 670,
+      "brotli": 594
+    },
+    "turf-centroid/dist/esm/index.js": {
+      "raw": 489,
+      "gzip": 282,
+      "brotli": 264
+    },
+    "turf-circle/dist/esm/index.js": {
+      "raw": 719,
+      "gzip": 365,
+      "brotli": 308
+    },
+    "turf-clean-coords/dist/esm/index.js": {
+      "raw": 3026,
+      "gzip": 1008,
+      "brotli": 897
+    },
+    "turf-clone/dist/esm/index.js": {
+      "raw": 2634,
+      "gzip": 749,
+      "brotli": 645
+    },
+    "turf-clusters/dist/esm/index.js": {
+      "raw": 3357,
+      "gzip": 949,
+      "brotli": 819
+    },
+    "turf-clusters-dbscan/dist/esm/index.js": {
+      "raw": 3498,
+      "gzip": 1052,
+      "brotli": 934
+    },
+    "turf-clusters-kmeans/dist/esm/index.js": {
+      "raw": 1070,
+      "gzip": 464,
+      "brotli": 409
+    },
+    "turf-collect/dist/esm/index.js": {
+      "raw": 1234,
+      "gzip": 529,
+      "brotli": 465
+    },
+    "turf-combine/dist/esm/index.js": {
+      "raw": 2127,
+      "gzip": 548,
+      "brotli": 472
+    },
+    "turf-concave/dist/esm/index.js": {
+      "raw": 5802,
+      "gzip": 1511,
+      "brotli": 1353
+    },
+    "turf-convex/dist/esm/index.js": {
+      "raw": 645,
+      "gzip": 340,
+      "brotli": 302
+    },
+    "turf-destination/dist/esm/index.js": {
+      "raw": 1174,
+      "gzip": 453,
+      "brotli": 383
+    },
+    "turf-difference/dist/esm/index.js": {
+      "raw": 796,
+      "gzip": 396,
+      "brotli": 313
+    },
+    "turf-directional-mean/dist/esm/index.js": {
+      "raw": 5431,
+      "gzip": 1545,
+      "brotli": 1396
+    },
+    "turf-dissolve/dist/esm/index.js": {
+      "raw": 1890,
+      "gzip": 673,
+      "brotli": 572
+    },
+    "turf-distance/dist/esm/index.js": {
+      "raw": 795,
+      "gzip": 363,
+      "brotli": 304
+    },
+    "turf-distance-weight/dist/esm/index.js": {
+      "raw": 2247,
+      "gzip": 738,
+      "brotli": 626
+    },
+    "turf-ellipse/dist/esm/index.js": {
+      "raw": 2850,
+      "gzip": 936,
+      "brotli": 862
+    },
+    "turf-envelope/dist/esm/index.js": {
+      "raw": 279,
+      "gzip": 188,
+      "brotli": 160
+    },
+    "turf-explode/dist/esm/index.js": {
+      "raw": 771,
+      "gzip": 319,
+      "brotli": 273
+    },
+    "turf-flatten/dist/esm/index.js": {
+      "raw": 436,
+      "gzip": 263,
+      "brotli": 227
+    },
+    "turf-flip/dist/esm/index.js": {
+      "raw": 706,
+      "gzip": 370,
+      "brotli": 317
+    },
+    "turf-geojson-rbush/dist/esm/index.js": {
+      "raw": 5726,
+      "gzip": 1415,
+      "brotli": 1226
+    },
+    "turf-great-circle/dist/esm/index.js": {
+      "raw": 924,
+      "gzip": 448,
+      "brotli": 385
+    },
+    "turf-helpers/dist/esm/index.js": {
+      "raw": 8844,
+      "gzip": 2081,
+      "brotli": 1852
+    },
+    "turf-hex-grid/dist/esm/index.js": {
+      "raw": 3802,
+      "gzip": 1132,
+      "brotli": 1018
+    },
+    "turf-interpolate/dist/esm/index.js": {
+      "raw": 2867,
+      "gzip": 951,
+      "brotli": 806
+    },
+    "turf-intersect/dist/esm/index.js": {
+      "raw": 765,
+      "gzip": 390,
+      "brotli": 354
+    },
+    "turf-invariant/dist/esm/index.js": {
+      "raw": 3551,
+      "gzip": 851,
+      "brotli": 715
+    },
+    "turf-isobands/dist/esm/index.js": {
+      "raw": 15582,
+      "gzip": 3700,
+      "brotli": 3282
+    },
+    "turf-isolines/dist/esm/index.js": {
+      "raw": 9722,
+      "gzip": 2305,
+      "brotli": 2066
+    },
+    "turf-kinks/dist/esm/index.js": {
+      "raw": 3141,
+      "gzip": 980,
+      "brotli": 851
+    },
+    "turf-length/dist/esm/index.js": {
+      "raw": 462,
+      "gzip": 277,
+      "brotli": 232
+    },
+    "turf-line-arc/dist/esm/index.js": {
+      "raw": 1260,
+      "gzip": 543,
+      "brotli": 468
+    },
+    "turf-line-chunk/dist/esm/index.js": {
+      "raw": 1546,
+      "gzip": 633,
+      "brotli": 521
+    },
+    "turf-line-intersect/dist/esm/index.js": {
+      "raw": 7408,
+      "gzip": 1934,
+      "brotli": 1735
+    },
+    "turf-line-offset/dist/esm/index.js": {
+      "raw": 3736,
+      "gzip": 1223,
+      "brotli": 1075
+    },
+    "turf-line-overlap/dist/esm/index.js": {
+      "raw": 3814,
+      "gzip": 1043,
+      "brotli": 912
+    },
+    "turf-line-segment/dist/esm/index.js": {
+      "raw": 1708,
+      "gzip": 653,
+      "brotli": 564
+    },
+    "turf-line-slice/dist/esm/index.js": {
+      "raw": 1401,
+      "gzip": 555,
+      "brotli": 506
+    },
+    "turf-line-slice-along/dist/esm/index.js": {
+      "raw": 2155,
+      "gzip": 712,
+      "brotli": 630
+    },
+    "turf-line-split/dist/esm/index.js": {
+      "raw": 4689,
+      "gzip": 1393,
+      "brotli": 1225
+    },
+    "turf-line-to-polygon/dist/esm/index.js": {
+      "raw": 2623,
+      "gzip": 906,
+      "brotli": 801
+    },
+    "turf-mask/dist/esm/index.js": {
+      "raw": 1912,
+      "gzip": 655,
+      "brotli": 584
+    },
+    "turf-meta/dist/esm/index.js": {
+      "raw": 22136,
+      "gzip": 2901,
+      "brotli": 2558
+    },
+    "turf-midpoint/dist/esm/index.js": {
+      "raw": 461,
+      "gzip": 238,
+      "brotli": 197
+    },
+    "turf-moran-index/dist/esm/index.js": {
+      "raw": 2030,
+      "gzip": 778,
+      "brotli": 693
+    },
+    "turf-nearest-neighbor-analysis/dist/esm/index.js": {
+      "raw": 1857,
+      "gzip": 709,
+      "brotli": 615
+    },
+    "turf-nearest-point/dist/esm/index.js": {
+      "raw": 1860,
+      "gzip": 697,
+      "brotli": 620
+    },
+    "turf-nearest-point-on-line/dist/esm/index.js": {
+      "raw": 6216,
+      "gzip": 1847,
+      "brotli": 1659
+    },
+    "turf-nearest-point-to-line/dist/esm/index.js": {
+      "raw": 2389,
+      "gzip": 909,
+      "brotli": 792
+    },
+    "turf-planepoint/dist/esm/index.js": {
+      "raw": 1268,
+      "gzip": 516,
+      "brotli": 439
+    },
+    "turf-point-grid/dist/esm/index.js": {
+      "raw": 1489,
+      "gzip": 583,
+      "brotli": 489
+    },
+    "turf-point-on-feature/dist/esm/index.js": {
+      "raw": 3396,
+      "gzip": 918,
+      "brotli": 820
+    },
+    "turf-point-to-line-distance/dist/esm/index.js": {
+      "raw": 2196,
+      "gzip": 833,
+      "brotli": 732
+    },
+    "turf-point-to-polygon-distance/dist/esm/index.js": {
+      "raw": 1987,
+      "gzip": 708,
+      "brotli": 623
+    },
+    "turf-points-within-polygon/dist/esm/index.js": {
+      "raw": 1333,
+      "gzip": 493,
+      "brotli": 423
+    },
+    "turf-polygon-smooth/dist/esm/index.js": {
+      "raw": 3535,
+      "gzip": 848,
+      "brotli": 765
+    },
+    "turf-polygon-tangents/dist/esm/index.js": {
+      "raw": 3425,
+      "gzip": 1005,
+      "brotli": 897
+    },
+    "turf-polygon-to-line/dist/esm/index.js": {
+      "raw": 1549,
+      "gzip": 537,
+      "brotli": 465
+    },
+    "turf-polygonize/dist/esm/index.js": {
+      "raw": 20623,
+      "gzip": 5417,
+      "brotli": 4845
+    },
+    "turf-projection/dist/esm/index.js": {
+      "raw": 1739,
+      "gzip": 694,
+      "brotli": 635
+    },
+    "turf-quadrat-analysis/dist/esm/index.js": {
+      "raw": 3173,
+      "gzip": 1119,
+      "brotli": 1005
+    },
+    "turf-random/dist/esm/index.js": {
+      "raw": 4693,
+      "gzip": 1298,
+      "brotli": 1141
+    },
+    "turf-rectangle-grid/dist/esm/index.js": {
+      "raw": 1742,
+      "gzip": 621,
+      "brotli": 569
+    },
+    "turf-rewind/dist/esm/index.js": {
+      "raw": 2764,
+      "gzip": 806,
+      "brotli": 711
+    },
+    "turf-rhumb-bearing/dist/esm/index.js": {
+      "raw": 1091,
+      "gzip": 480,
+      "brotli": 443
+    },
+    "turf-rhumb-destination/dist/esm/index.js": {
+      "raw": 1701,
+      "gzip": 691,
+      "brotli": 633
+    },
+    "turf-rhumb-distance/dist/esm/index.js": {
+      "raw": 1360,
+      "gzip": 559,
+      "brotli": 492
+    },
+    "turf-sample/dist/esm/index.js": {
+      "raw": 790,
+      "gzip": 419,
+      "brotli": 352
+    },
+    "turf-sector/dist/esm/index.js": {
+      "raw": 1453,
+      "gzip": 570,
+      "brotli": 491
+    },
+    "turf-shortest-path/dist/esm/index.js": {
+      "raw": 11694,
+      "gzip": 3338,
+      "brotli": 2989
+    },
+    "turf-simplify/dist/esm/index.js": {
+      "raw": 4848,
+      "gzip": 1420,
+      "brotli": 1299
+    },
+    "turf-square/dist/esm/index.js": {
+      "raw": 850,
+      "gzip": 356,
+      "brotli": 320
+    },
+    "turf-square-grid/dist/esm/index.js": {
+      "raw": 297,
+      "gzip": 198,
+      "brotli": 161
+    },
+    "turf-standard-deviational-ellipse/dist/esm/index.js": {
+      "raw": 3335,
+      "gzip": 1031,
+      "brotli": 922
+    },
+    "turf-tag/dist/esm/index.js": {
+      "raw": 753,
+      "gzip": 343,
+      "brotli": 322
+    },
+    "turf-tesselate/dist/esm/index.js": {
+      "raw": 1950,
+      "gzip": 719,
+      "brotli": 654
+    },
+    "turf-tin/dist/esm/index.js": {
+      "raw": 4190,
+      "gzip": 1337,
+      "brotli": 1184
+    },
+    "turf-transform-rotate/dist/esm/index.js": {
+      "raw": 1490,
+      "gzip": 563,
+      "brotli": 499
+    },
+    "turf-transform-scale/dist/esm/index.js": {
+      "raw": 4041,
+      "gzip": 1100,
+      "brotli": 977
+    },
+    "turf-transform-translate/dist/esm/index.js": {
+      "raw": 1697,
+      "gzip": 626,
+      "brotli": 566
+    },
+    "turf-triangle-grid/dist/esm/index.js": {
+      "raw": 3999,
+      "gzip": 634,
+      "brotli": 564
+    },
+    "turf-truncate/dist/esm/index.js": {
+      "raw": 1412,
+      "gzip": 577,
+      "brotli": 484
+    },
+    "turf-union/dist/esm/index.js": {
+      "raw": 726,
+      "gzip": 385,
+      "brotli": 315
+    },
+    "turf-unkink-polygon/dist/esm/index.js": {
+      "raw": 19389,
+      "gzip": 4151,
+      "brotli": 3658
+    },
+    "turf-voronoi/dist/esm/index.js": {
+      "raw": 1224,
+      "gzip": 550,
+      "brotli": 500
+    }
+  },
+  "esmTotal": {
+    "raw": 380872,
+    "gzip": 104847,
+    "brotli": 92543
+  }
+}

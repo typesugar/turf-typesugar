@@ -1,0 +1,21 @@
+commit: fbcc5775fddb5dd219db9f070ad9f7c336aa5295
+branch: case-study-fixes
+remote: https://github.com/typesugar/typesugar
+packed: 2026-10-20T12:36:57Z
+node:   v26.3.1
+files:
+  9b9b876806151974a1a69393ecb6c489f6125cf2ed2136c04070bc006b02fcd5  typesugar-0.1.1-fbcc5775.tgz
+  98538d68fa17adb42c88725993f5acd49941e978eba4d5bb70f6b675ca4f5e2d  typesugar-contracts-0.1.1-fbcc5775.tgz
+  7a8b0005d450d1e6577dcf0b4116325fdb470615c68fbd22f045cb2417276169  typesugar-core-0.1.1-fbcc5775.tgz
+  d44394d08a33b8e4acd665e00cf76282fff5d0ab9823fbee95c14b9ba5864bb4  typesugar-derive-0.1.1-fbcc5775.tgz
+  fcafc43effeed7f71ca378fa08f21bf08ae6fb931db48d4c54c9a1ae551610a9  typesugar-fp-0.1.1-fbcc5775.tgz
+  dcadcbd2c601623b32c9f22dbba71b5982644c287f082f75b7b021bb12957371  typesugar-lsp-common-0.1.1-fbcc5775.tgz
+  6a9ad295a67728e8de9b1f0b1b8336dbed704caefc8fdebd573712a7968c17ed  typesugar-macros-0.1.1-fbcc5775.tgz
+  368d3799285b2aec939a80559357d6dd3976dff98a538e1229a23a303fe3b116  typesugar-reflect-0.1.1-fbcc5775.tgz
+  2f385ee4aca04c1b691ead48888152bbce7928250ee97ba649603dec852ce856  typesugar-std-0.1.1-fbcc5775.tgz
+  ac4b4f3e4825695c1b7ef7edde840bf50d9d1bda133bbb6615e27707be6e0ca2  typesugar-transformer-0.1.1-fbcc5775.tgz
+  dbade9605d384d833c9ac19144b7441cd7db17bdcd815a25d9bc44debabe6e18  typesugar-transformer-core-0.1.1-fbcc5775.tgz
+  89f30fca42a3156a79c77f4949b547943b795d09c7245a63a936cb42c98ec9a9  typesugar-type-system-0.1.1-fbcc5775.tgz
+  0b44a7ef7c817df58fb6037466f10a03bd071a5a691011219596041b7141995a  typesugar-typeclass-0.1.1-fbcc5775.tgz
+  8c99f645b152c90fb65352bf360776dcc82792c65300a08e4d9f8b21a80be6bc  typesugar-validate-0.1.1-fbcc5775.tgz
+  093b609ee7e0c53231237063e0589fd7314bdfa170cf9def4803ebfa1d948944  unplugin-typesugar-0.1.1-fbcc5775.tgz
