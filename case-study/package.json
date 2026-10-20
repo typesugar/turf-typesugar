@@ -1,0 +1,10 @@
+{
+  "name": "turf-typesugar-case-study",
+  "private": true,
+  "type": "module",
+  "description": "Tooling for the Turf x typesugar case study (see CASE-STUDY.md). Holds the typesugar dependencies so the root manifest stays as Turf ships it.",
+  "devDependencies": {
+    "typesugar": "file:../vendor/typesugar/typesugar-0.1.1-fbcc5775.tgz",
+    "unplugin-typesugar": "file:../vendor/typesugar/unplugin-typesugar-0.1.1-fbcc5775.tgz"
+  }
+}

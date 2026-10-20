@@ -1,6 +1,9 @@
 packages:
   - "packages/*"
   - "test/*"
+  # case-study tooling: depends on the vendored typesugar tarballs, kept out of
+  # the root package so adding it leaves every Turf resolution in the lockfile alone.
+  - "case-study"
 
 catalog:
   "@types/benchmark": ^2.1.5
@@ -18,3 +21,20 @@ overrides:
   # we do not use the vue capabilities of documentation, so remove this optional dependency
   # which has a (false positive) CVE associated with it
   "documentation>vue-template-compiler": "-"
+  # typesugar case study: every typesugar package resolves to the vendored
+  # tarball (see vendor/typesugar/README.md), never to the registry.
+  typesugar: "file:vendor/typesugar/typesugar-0.1.1-fbcc5775.tgz"
+  unplugin-typesugar: "file:vendor/typesugar/unplugin-typesugar-0.1.1-fbcc5775.tgz"
+  "@typesugar/core": "file:vendor/typesugar/typesugar-core-0.1.1-fbcc5775.tgz"
+  "@typesugar/macros": "file:vendor/typesugar/typesugar-macros-0.1.1-fbcc5775.tgz"
+  "@typesugar/transformer": "file:vendor/typesugar/typesugar-transformer-0.1.1-fbcc5775.tgz"
+  "@typesugar/transformer-core": "file:vendor/typesugar/typesugar-transformer-core-0.1.1-fbcc5775.tgz"
+  "@typesugar/lsp-common": "file:vendor/typesugar/typesugar-lsp-common-0.1.1-fbcc5775.tgz"
+  "@typesugar/reflect": "file:vendor/typesugar/typesugar-reflect-0.1.1-fbcc5775.tgz"
+  "@typesugar/derive": "file:vendor/typesugar/typesugar-derive-0.1.1-fbcc5775.tgz"
+  "@typesugar/typeclass": "file:vendor/typesugar/typesugar-typeclass-0.1.1-fbcc5775.tgz"
+  "@typesugar/type-system": "file:vendor/typesugar/typesugar-type-system-0.1.1-fbcc5775.tgz"
+  "@typesugar/std": "file:vendor/typesugar/typesugar-std-0.1.1-fbcc5775.tgz"
+  "@typesugar/fp": "file:vendor/typesugar/typesugar-fp-0.1.1-fbcc5775.tgz"
+  "@typesugar/contracts": "file:vendor/typesugar/typesugar-contracts-0.1.1-fbcc5775.tgz"
+  "@typesugar/validate": "file:vendor/typesugar/typesugar-validate-0.1.1-fbcc5775.tgz"

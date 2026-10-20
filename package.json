@@ -13,7 +13,9 @@
     "lint:prettier": "prettier --check .",
     "preinstall": "npx only-allow pnpm",
     "prepare": "husky && lerna run build",
-    "test": "pnpm run lint && lerna run test && lerna run --scope @turf/turf last-checks"
+    "test": "pnpm run lint && case-study/with-typesugar.sh lerna run test && case-study/with-typesugar.sh lerna run --scope @turf/turf last-checks",
+    "case-study:bench": "node case-study/bench.mjs",
+    "case-study:size": "node case-study/size.mjs"
   },
   "lint-staged": {
     "package.json": [
