@@ -184,8 +184,9 @@ reference reaches Turf's published JS or `.d.ts`.
 typesugar: branch `case-study-fixes` at
 [`0411491c`](https://github.com/typesugar/typesugar/commit/0411491c), which is
 Stage 0's loader on `decisions-1.0` plus three fixes from this stage. It is
-vendored in `vendor/typesugar/`. The branch's next commit, `985145e6`, only
-reformats a test file, so the packed packages are the same.
+vendored in `vendor/typesugar/`. The branch's later commits (`985145e6`,
+`fea567ea`) change only test files: a prettier fix, and a red-team test that
+pinned the old field-list `Clone` output. The packed packages are the same.
 
 #### What changed in Turf
 
