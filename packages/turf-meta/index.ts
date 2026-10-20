@@ -15,6 +15,7 @@ import {
   GeoJsonTypes,
 } from "geojson";
 import { AllGeoJSON, Lines, Id } from "@turf/helpers";
+import { match } from "@typesugar/std";
 
 /**
  * Callback for coordEach
@@ -929,20 +930,19 @@ function flattenEach<
         return;
     }
 
-    var geomType;
-
     // Callback for multi-geometry
-    switch (type) {
-      case "MultiPoint":
-        geomType = "Point";
-        break;
-      case "MultiLineString":
-        geomType = "LineString";
-        break;
-      case "MultiPolygon":
-        geomType = "Polygon";
-        break;
-    }
+    var geomType = match(type)
+      // @ts-expect-error: typesugar types the fluent chain as `never` until it is expanded
+      .case("MultiPoint")
+      .then("Point")
+      .case("MultiLineString")
+      .then("LineString")
+      .case("MultiPolygon")
+      .then("Polygon")
+      // geomEach passes a GeometryCollection through only when it is nested
+      // three deep; v7.4.0's switch left geomType undefined for it too.
+      .case("GeometryCollection")
+      .then(undefined);
 
     for (
       var multiFeatureIndex = 0;
