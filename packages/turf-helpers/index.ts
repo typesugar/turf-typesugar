@@ -16,6 +16,7 @@ import {
   GeoJSON,
 } from "geojson";
 
+import { is } from "@typesugar/validate";
 import { Id } from "./lib/geojson.js";
 export * from "./lib/geojson.js";
 
@@ -962,7 +963,7 @@ export function validateId(id: any): void {
   if (!id) {
     throw new Error("id is required");
   }
-  if (["string", "number"].indexOf(typeof id) === -1) {
+  if (!is<Id>(id)) {
     throw new Error("id must be a number or a string");
   }
 }
