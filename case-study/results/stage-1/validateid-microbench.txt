@@ -1,0 +1,7 @@
+node v26.3.1, Apple M4 Pro, 2026-10-20T15:05Z
+ 1:03  up 14 days, 29 mins, 10 users, load averages: 5.31 6.79 7.57
+v7.4.0 (indexOf)     median 51,118,630 ops/s (min-max 8.4%), 0.0% vs v7.4.0
+typesugar is<Id>()   median 98,567,184 ops/s (min-max 9.9%), 92.8% vs v7.4.0
+by hand              median 99,713,580 ops/s (min-max 4.6%), 95.1% vs v7.4.0
+exit 0
+ 1:05  up 14 days, 30 mins, 10 users, load averages: 4.54 6.17 7.26
