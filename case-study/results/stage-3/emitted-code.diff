@@ -1,0 +1,612 @@
+--- packages/turf-meta/dist/esm/index.js	2026-10-21 07:24:03
++++ packages/turf-meta/dist/esm/index.js	2026-10-21 07:17:48
+@@ -1,7 +1,8 @@
+ // index.ts
+ import { feature, point, lineString, isObject } from "@turf/helpers";
+ function coordEach(geojson, callback, excludeWrapCoord) {
+-  if (geojson === null) return;
++  if (geojson === null)
++    return;
+   var j, k, l, geometry, stopG, coords, geometryMaybeCollection, wrapShrink = 0, coordIndex = 0, isGeometryCollection, type = geojson.type, isFeatureCollection = type === "FeatureCollection", isFeature = type === "Feature", stop = isFeatureCollection ? geojson.features.length : 1;
+   for (var featureIndex = 0; featureIndex < stop; featureIndex++) {
+     geometryMaybeCollection = isFeatureCollection ? (
+@@ -17,7 +18,8 @@
+       var multiFeatureIndex = 0;
+       var geometryIndex = 0;
+       geometry = isGeometryCollection ? geometryMaybeCollection.geometries[geomIndex] : geometryMaybeCollection;
+-      if (geometry === null) continue;
++      if (geometry === null)
++        continue;
+       coords = geometry.coordinates;
+       var geomType = geometry.type;
+       wrapShrink = excludeWrapCoord && (geomType === "Polygon" || geomType === "MultiPolygon") ? 1 : 0;
+@@ -27,13 +29,7 @@
+         case "Point":
+           if (
+             // @ts-expect-error: Known type conflict
+-            callback(
+-              coords,
+-              coordIndex,
+-              featureIndex,
+-              multiFeatureIndex,
+-              geometryIndex
+-            ) === false
++            callback(coords, coordIndex, featureIndex, multiFeatureIndex, geometryIndex) === false
+           )
+             return false;
+           coordIndex++;
+@@ -44,19 +40,15 @@
+           for (j = 0; j < coords.length; j++) {
+             if (
+               // @ts-expect-error: Known type conflict
+-              callback(
+-                coords[j],
+-                coordIndex,
+-                featureIndex,
+-                multiFeatureIndex,
+-                geometryIndex
+-              ) === false
++              callback(coords[j], coordIndex, featureIndex, multiFeatureIndex, geometryIndex) === false
+             )
+               return false;
+             coordIndex++;
+-            if (geomType === "MultiPoint") multiFeatureIndex++;
++            if (geomType === "MultiPoint")
++              multiFeatureIndex++;
+           }
+-          if (geomType === "LineString") multiFeatureIndex++;
++          if (geomType === "LineString")
++            multiFeatureIndex++;
+           break;
+         case "Polygon":
+         case "MultiLineString":
+@@ -64,21 +56,18 @@
+             for (k = 0; k < coords[j].length - wrapShrink; k++) {
+               if (
+                 // @ts-expect-error: Known type conflict
+-                callback(
+-                  coords[j][k],
+-                  coordIndex,
+-                  featureIndex,
+-                  multiFeatureIndex,
+-                  geometryIndex
+-                ) === false
++                callback(coords[j][k], coordIndex, featureIndex, multiFeatureIndex, geometryIndex) === false
+               )
+                 return false;
+               coordIndex++;
+             }
+-            if (geomType === "MultiLineString") multiFeatureIndex++;
+-            if (geomType === "Polygon") geometryIndex++;
++            if (geomType === "MultiLineString")
++              multiFeatureIndex++;
++            if (geomType === "Polygon")
++              geometryIndex++;
+           }
+-          if (geomType === "Polygon") multiFeatureIndex++;
++          if (geomType === "Polygon")
++            multiFeatureIndex++;
+           break;
+         case "MultiPolygon":
+           for (j = 0; j < coords.length; j++) {
+@@ -87,13 +76,7 @@
+               for (l = 0; l < coords[j][k].length - wrapShrink; l++) {
+                 if (
+                   // @ts-expect-error: Known type conflict
+-                  callback(
+-                    coords[j][k][l],
+-                    coordIndex,
+-                    featureIndex,
+-                    multiFeatureIndex,
+-                    geometryIndex
+-                  ) === false
++                  callback(coords[j][k][l], coordIndex, featureIndex, multiFeatureIndex, geometryIndex) === false
+                 )
+                   return false;
+                 coordIndex++;
+@@ -119,24 +102,20 @@
+ }
+ function coordReduce(geojson, callback, initialValue, excludeWrapCoord) {
+   var previousValue = initialValue;
+-  coordEach(
+-    geojson,
+-    function(currentCoord, coordIndex, featureIndex, multiFeatureIndex, geometryIndex) {
+-      if (coordIndex === 0 && initialValue === void 0)
+-        previousValue = currentCoord;
+-      else
+-        previousValue = callback(
+-          // @ts-expect-error: Known type conflict
+-          previousValue,
+-          currentCoord,
+-          coordIndex,
+-          featureIndex,
+-          multiFeatureIndex,
+-          geometryIndex
+-        );
+-    },
+-    excludeWrapCoord
+-  );
++  coordEach(geojson, function(currentCoord, coordIndex, featureIndex, multiFeatureIndex, geometryIndex) {
++    if (coordIndex === 0 && initialValue === void 0)
++      previousValue = currentCoord;
++    else
++      previousValue = callback(
++        // @ts-expect-error: Known type conflict
++        previousValue,
++        currentCoord,
++        coordIndex,
++        featureIndex,
++        multiFeatureIndex,
++        geometryIndex
++      );
++  }, excludeWrapCoord);
+   return previousValue;
+ }
+ function propEach(geojson, callback) {
+@@ -144,7 +123,8 @@
+   switch (geojson.type) {
+     case "FeatureCollection":
+       for (i = 0; i < geojson.features.length; i++) {
+-        if (callback(geojson.features[i].properties, i) === false) break;
++        if (callback(geojson.features[i].properties, i) === false)
++          break;
+       }
+       break;
+     case "Feature":
+@@ -167,7 +147,8 @@
+     callback(geojson, 0);
+   } else if (geojson.type === "FeatureCollection") {
+     for (var i = 0; i < geojson.features.length; i++) {
+-      if (callback(geojson.features[i], i) === false) break;
++      if (callback(geojson.features[i], i) === false)
++        break;
+     }
+   }
+ }
+@@ -176,7 +157,8 @@
+   featureEach(geojson, function(currentFeature, featureIndex) {
+     if (featureIndex === 0 && initialValue === void 0)
+       previousValue = currentFeature;
+-    else previousValue = callback(previousValue, currentFeature, featureIndex);
++    else
++      previousValue = callback(previousValue, currentFeature, featureIndex);
+   });
+   return previousValue;
+ }
+@@ -246,13 +228,7 @@
+         case "MultiPolygon": {
+           if (
+             // @ts-expect-error: Known type conflict
+-            callback(
+-              geometry,
+-              featureIndex,
+-              featureProperties,
+-              featureBBox,
+-              featureId
+-            ) === false
++            callback(geometry, featureIndex, featureProperties, featureBBox, featureId) === false
+           )
+             return false;
+           break;
+@@ -261,13 +237,7 @@
+           for (j = 0; j < geometry.geometries.length; j++) {
+             if (
+               // @ts-expect-error: Known type conflict
+-              callback(
+-                geometry.geometries[j],
+-                featureIndex,
+-                featureProperties,
+-                featureBBox,
+-                featureId
+-              ) === false
++              callback(geometry.geometries[j], featureIndex, featureProperties, featureBBox, featureId) === false
+             )
+               return false;
+           }
+@@ -282,23 +252,20 @@
+ }
+ function geomReduce(geojson, callback, initialValue) {
+   var previousValue = initialValue;
+-  geomEach(
+-    geojson,
+-    function(currentGeometry, featureIndex, featureProperties, featureBBox, featureId) {
+-      if (featureIndex === 0 && initialValue === void 0)
+-        previousValue = currentGeometry;
+-      else
+-        previousValue = callback(
+-          // @ts-expect-error: Known type conflict
+-          previousValue,
+-          currentGeometry,
+-          featureIndex,
+-          featureProperties,
+-          featureBBox,
+-          featureId
+-        );
+-    }
+-  );
++  geomEach(geojson, function(currentGeometry, featureIndex, featureProperties, featureBBox, featureId) {
++    if (featureIndex === 0 && initialValue === void 0)
++      previousValue = currentGeometry;
++    else
++      previousValue = callback(
++        // @ts-expect-error: Known type conflict
++        previousValue,
++        currentGeometry,
++        featureIndex,
++        featureProperties,
++        featureBBox,
++        featureId
++      );
++  });
+   return previousValue;
+ }
+ function flattenEach(geojson, callback) {
+@@ -311,27 +278,12 @@
+       case "Polygon":
+         if (
+           // @ts-expect-error: Known type conflict
+-          callback(
+-            feature(geometry, properties, { bbox, id }),
+-            featureIndex,
+-            0
+-          ) === false
++          callback(feature(geometry, properties, { bbox, id }), featureIndex, 0) === false
+         )
+           return false;
+         return;
+     }
+-    var geomType;
+-    switch (type) {
+-      case "MultiPoint":
+-        geomType = "Point";
+-        break;
+-      case "MultiLineString":
+-        geomType = "LineString";
+-        break;
+-      case "MultiPolygon":
+-        geomType = "Polygon";
+-        break;
+-    }
++    var geomType = type === "MultiPoint" ? "Point" : type === "MultiLineString" ? "LineString" : type === "MultiPolygon" ? "Polygon" : void 0;
+     for (
+       var multiFeatureIndex = 0;
+       // @ts-expect-error: Known type conflict
+@@ -353,70 +305,66 @@
+ }
+ function flattenReduce(geojson, callback, initialValue) {
+   var previousValue = initialValue;
+-  flattenEach(
+-    geojson,
+-    function(currentFeature, featureIndex, multiFeatureIndex) {
+-      if (featureIndex === 0 && multiFeatureIndex === 0 && initialValue === void 0)
+-        previousValue = currentFeature;
+-      else
+-        previousValue = callback(
+-          // @ts-expect-error: Known type conflict
+-          previousValue,
+-          currentFeature,
+-          featureIndex,
+-          multiFeatureIndex
+-        );
+-    }
+-  );
++  flattenEach(geojson, function(currentFeature, featureIndex, multiFeatureIndex) {
++    if (featureIndex === 0 && multiFeatureIndex === 0 && initialValue === void 0)
++      previousValue = currentFeature;
++    else
++      previousValue = callback(
++        // @ts-expect-error: Known type conflict
++        previousValue,
++        currentFeature,
++        featureIndex,
++        multiFeatureIndex
++      );
++  });
+   return previousValue;
+ }
+ function segmentEach(geojson, callback) {
+   flattenEach(geojson, function(feature2, featureIndex, multiFeatureIndex) {
+     var segmentIndex = 0;
+-    if (!feature2.geometry) return;
++    if (!feature2.geometry)
++      return;
+     var type = feature2.geometry.type;
+-    if (type === "Point" || type === "MultiPoint") return;
++    if (type === "Point" || type === "MultiPoint")
++      return;
+     var previousCoords;
+     var previousFeatureIndex = 0;
+     var previousMultiIndex = 0;
+     var prevGeomIndex = 0;
+     if (
+       // @ts-expect-error: Known type conflict
+-      coordEach(
+-        feature2,
+-        function(currentCoord, coordIndex, featureIndexCoord, multiPartIndexCoord, geometryIndex) {
+-          if (
+-            // @ts-expect-error: Known type conflict
+-            previousCoords === void 0 || featureIndex > previousFeatureIndex || multiPartIndexCoord > previousMultiIndex || geometryIndex > prevGeomIndex
+-          ) {
+-            previousCoords = currentCoord;
+-            previousFeatureIndex = featureIndex;
+-            previousMultiIndex = multiPartIndexCoord;
+-            prevGeomIndex = geometryIndex;
+-            segmentIndex = 0;
+-            return;
+-          }
+-          var currentSegment = lineString(
+-            // @ts-expect-error: Known type conflict
+-            [previousCoords, currentCoord],
+-            feature2.properties
+-          );
+-          if (
+-            // @ts-expect-error: Known type conflict
+-            callback(
+-              // @ts-expect-error: Known type conflict
+-              currentSegment,
+-              featureIndex,
+-              multiFeatureIndex,
+-              geometryIndex,
+-              segmentIndex
+-            ) === false
+-          )
+-            return false;
+-          segmentIndex++;
++      coordEach(feature2, function(currentCoord, coordIndex, featureIndexCoord, multiPartIndexCoord, geometryIndex) {
++        if (
++          // @ts-expect-error: Known type conflict
++          previousCoords === void 0 || featureIndex > previousFeatureIndex || multiPartIndexCoord > previousMultiIndex || geometryIndex > prevGeomIndex
++        ) {
+           previousCoords = currentCoord;
++          previousFeatureIndex = featureIndex;
++          previousMultiIndex = multiPartIndexCoord;
++          prevGeomIndex = geometryIndex;
++          segmentIndex = 0;
++          return;
+         }
+-      ) === false
++        var currentSegment = lineString(
++          // @ts-expect-error: Known type conflict
++          [previousCoords, currentCoord],
++          feature2.properties
++        );
++        if (
++          // @ts-expect-error: Known type conflict
++          callback(
++            // @ts-expect-error: Known type conflict
++            currentSegment,
++            featureIndex,
++            multiFeatureIndex,
++            geometryIndex,
++            segmentIndex
++          ) === false
++        )
++          return false;
++        segmentIndex++;
++        previousCoords = currentCoord;
++      }) === false
+     )
+       return false;
+   });
+@@ -424,30 +372,29 @@
+ function segmentReduce(geojson, callback, initialValue) {
+   var previousValue = initialValue;
+   var started = false;
+-  segmentEach(
+-    geojson,
+-    function(currentSegment, featureIndex, multiFeatureIndex, geometryIndex, segmentIndex) {
+-      if (started === false && initialValue === void 0)
+-        previousValue = currentSegment;
+-      else
+-        previousValue = callback(
+-          previousValue,
+-          // @ts-expect-error: Known type conflict
+-          currentSegment,
+-          featureIndex,
+-          multiFeatureIndex,
+-          geometryIndex,
+-          segmentIndex
+-        );
+-      started = true;
+-    }
+-  );
++  segmentEach(geojson, function(currentSegment, featureIndex, multiFeatureIndex, geometryIndex, segmentIndex) {
++    if (started === false && initialValue === void 0)
++      previousValue = currentSegment;
++    else
++      previousValue = callback(
++        previousValue,
++        // @ts-expect-error: Known type conflict
++        currentSegment,
++        featureIndex,
++        multiFeatureIndex,
++        geometryIndex,
++        segmentIndex
++      );
++    started = true;
++  });
+   return previousValue;
+ }
+ function lineEach(geojson, callback) {
+-  if (!geojson) throw new Error("geojson is required");
++  if (!geojson)
++    throw new Error("geojson is required");
+   flattenEach(geojson, function(feature2, featureIndex, multiFeatureIndex) {
+-    if (feature2.geometry === null) return;
++    if (feature2.geometry === null)
++      return;
+     var type = feature2.geometry.type;
+     var coords = feature2.geometry.coordinates;
+     switch (type) {
+@@ -475,26 +422,18 @@
+ }
+ function lineReduce(geojson, callback, initialValue) {
+   var previousValue = initialValue;
+-  lineEach(
+-    geojson,
+-    function(currentLine, featureIndex, multiFeatureIndex, geometryIndex) {
+-      if (featureIndex === 0 && initialValue === void 0)
+-        previousValue = currentLine;
+-      else
+-        previousValue = callback(
+-          previousValue,
+-          currentLine,
+-          featureIndex,
+-          multiFeatureIndex,
+-          geometryIndex
+-        );
+-    }
+-  );
++  lineEach(geojson, function(currentLine, featureIndex, multiFeatureIndex, geometryIndex) {
++    if (featureIndex === 0 && initialValue === void 0)
++      previousValue = currentLine;
++    else
++      previousValue = callback(previousValue, currentLine, featureIndex, multiFeatureIndex, geometryIndex);
++  });
+   return previousValue;
+ }
+ function findSegment(geojson, options) {
+   options = options || {};
+-  if (!isObject(options)) throw new Error("options is invalid");
++  if (!isObject(options))
++    throw new Error("options is invalid");
+   var featureIndex = options.featureIndex || 0;
+   var multiFeatureIndex = options.multiFeatureIndex || 0;
+   var geometryIndex = options.geometryIndex || 0;
+@@ -524,14 +463,16 @@
+     default:
+       throw new Error("geojson is invalid");
+   }
+-  if (geometry === null) return null;
++  if (geometry === null)
++    return null;
+   var coords = geometry.coordinates;
+   switch (geometry.type) {
+     case "Point":
+     case "MultiPoint":
+       return null;
+     case "LineString":
+-      if (segmentIndex < 0) segmentIndex = coords.length + segmentIndex - 1;
++      if (segmentIndex < 0)
++        segmentIndex = coords.length + segmentIndex - 1;
+       return lineString(
+         // @ts-expect-error: Known type conflict
+         [coords[segmentIndex], coords[segmentIndex + 1]],
+@@ -539,34 +480,27 @@
+         options
+       );
+     case "Polygon":
+-      if (geometryIndex < 0) geometryIndex = coords.length + geometryIndex;
++      if (geometryIndex < 0)
++        geometryIndex = coords.length + geometryIndex;
+       if (segmentIndex < 0)
+         segmentIndex = coords[geometryIndex].length + segmentIndex - 1;
+-      return lineString(
+-        [
+-          // @ts-expect-error: Known type conflict
+-          coords[geometryIndex][segmentIndex],
+-          // @ts-expect-error: Known type conflict
+-          coords[geometryIndex][segmentIndex + 1]
+-        ],
+-        properties,
+-        options
+-      );
++      return lineString([
++        // @ts-expect-error: Known type conflict
++        coords[geometryIndex][segmentIndex],
++        // @ts-expect-error: Known type conflict
++        coords[geometryIndex][segmentIndex + 1]
++      ], properties, options);
+     case "MultiLineString":
+       if (multiFeatureIndex < 0)
+         multiFeatureIndex = coords.length + multiFeatureIndex;
+       if (segmentIndex < 0)
+         segmentIndex = coords[multiFeatureIndex].length + segmentIndex - 1;
+-      return lineString(
+-        [
+-          // @ts-expect-error: Known type conflict
+-          coords[multiFeatureIndex][segmentIndex],
+-          // @ts-expect-error: Known type conflict
+-          coords[multiFeatureIndex][segmentIndex + 1]
+-        ],
+-        properties,
+-        options
+-      );
++      return lineString([
++        // @ts-expect-error: Known type conflict
++        coords[multiFeatureIndex][segmentIndex],
++        // @ts-expect-error: Known type conflict
++        coords[multiFeatureIndex][segmentIndex + 1]
++      ], properties, options);
+     case "MultiPolygon":
+       if (multiFeatureIndex < 0)
+         multiFeatureIndex = coords.length + multiFeatureIndex;
+@@ -575,22 +509,19 @@
+       if (segmentIndex < 0)
+         segmentIndex = // @ts-expect-error: Known type conflict
+         coords[multiFeatureIndex][geometryIndex].length - segmentIndex - 1;
+-      return lineString(
+-        [
+-          // @ts-expect-error: Known type conflict
+-          coords[multiFeatureIndex][geometryIndex][segmentIndex],
+-          // @ts-expect-error: Known type conflict
+-          coords[multiFeatureIndex][geometryIndex][segmentIndex + 1]
+-        ],
+-        properties,
+-        options
+-      );
++      return lineString([
++        // @ts-expect-error: Known type conflict
++        coords[multiFeatureIndex][geometryIndex][segmentIndex],
++        // @ts-expect-error: Known type conflict
++        coords[multiFeatureIndex][geometryIndex][segmentIndex + 1]
++      ], properties, options);
+   }
+   throw new Error("geojson is invalid");
+ }
+ function findPoint(geojson, options) {
+   options = options || {};
+-  if (!isObject(options)) throw new Error("options is invalid");
++  if (!isObject(options))
++    throw new Error("options is invalid");
+   var featureIndex = options.featureIndex || 0;
+   var multiFeatureIndex = options.multiFeatureIndex || 0;
+   var geometryIndex = options.geometryIndex || 0;
+@@ -620,7 +551,8 @@
+     default:
+       throw new Error("geojson is invalid");
+   }
+-  if (geometry === null) return null;
++  if (geometry === null)
++    return null;
+   var coords = geometry.coordinates;
+   switch (geometry.type) {
+     case "Point":
+@@ -630,10 +562,12 @@
+         multiFeatureIndex = coords.length + multiFeatureIndex;
+       return point(coords[multiFeatureIndex], properties, options);
+     case "LineString":
+-      if (coordIndex < 0) coordIndex = coords.length + coordIndex;
++      if (coordIndex < 0)
++        coordIndex = coords.length + coordIndex;
+       return point(coords[coordIndex], properties, options);
+     case "Polygon":
+-      if (geometryIndex < 0) geometryIndex = coords.length + geometryIndex;
++      if (geometryIndex < 0)
++        geometryIndex = coords.length + geometryIndex;
+       if (coordIndex < 0)
+         coordIndex = coords[geometryIndex].length + coordIndex;
+       return point(coords[geometryIndex][coordIndex], properties, options);
+@@ -650,11 +584,7 @@
+         geometryIndex = coords[multiFeatureIndex].length + geometryIndex;
+       if (coordIndex < 0)
+         coordIndex = coords[multiFeatureIndex][geometryIndex].length - coordIndex;
+-      return point(
+-        coords[multiFeatureIndex][geometryIndex][coordIndex],
+-        properties,
+-        options
+-      );
++      return point(coords[multiFeatureIndex][geometryIndex][coordIndex], properties, options);
+   }
+   throw new Error("geojson is invalid");
+ }

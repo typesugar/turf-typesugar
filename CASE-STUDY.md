@@ -334,6 +334,293 @@ New tooling: `case-study/leaks.mjs` (the scan above) and
 `case-study/experiments/` (the derived-Clone experiment and the
 `validateId` micro-benchmark).
 
+### Stage 3: exhaustive `match()` in `turf-meta`
+
+Run before Stage 2, by choice: `turf-meta` is called by nearly every Turf
+package, so it is the strongest zero-cost test in the study.
+
+**Result: one of `turf-meta`'s eleven `switch` statements became a
+`match()`, and the other ten could not.** `match()` is an expression, and
+`turf-meta`'s switches are statements. Their arms loop, call back, `return
+false` out of the enclosing function and update loop counters (F21). The one
+that fits is in `flattenEach`: it maps a multi-geometry type to its
+single-geometry type. Its literal translation failed the build, because the
+switch has no case for `"GeometryCollection"`. That case is reachable. A
+collection nested three deep reaches it, and `flattenEach`, `segmentEach` and
+`lineEach` then throw a `TypeError`, at v7.4.0 too (F23). The vendored
+typesugar compiled the match to an arrow IIFE, which allocates a closure on
+every call. It also left a dead `throw new MatchError(…)` after the last arm,
+which put `import { MatchError } from "@typesugar/std"` into `@turf/meta`'s
+published JS. Both are fixed in typesugar (F18, F19). With the fix the output
+is the conditional expression a person would write, and no benchmark moved.
+One cost stays: plain `tsc` rejects every fluent `match()` (`.case` on
+`never`). That breaks Turf's `test:types` and tsup's `.d.ts` build, so the
+match needs a `@ts-expect-error` (F20).
+
+typesugar: branch
+[`case-study-fixes-2`](https://github.com/typesugar/typesugar/tree/case-study-fixes-2)
+at [`be4286d3`](https://github.com/typesugar/typesugar/commit/be4286d3),
+which is Stage 1's `case-study-fixes` (`fea567ea`) plus the `match()` fix.
+It is vendored in `vendor/typesugar/`.
+
+#### What changed in Turf
+
+```diff
++import { match } from "@typesugar/std";
+ ...
+-    var geomType;
+-
+     // Callback for multi-geometry
+-    switch (type) {
+-      case "MultiPoint":
+-        geomType = "Point";
+-        break;
+-      case "MultiLineString":
+-        geomType = "LineString";
+-        break;
+-      case "MultiPolygon":
+-        geomType = "Polygon";
+-        break;
+-    }
++    var geomType = match(type)
++      // @ts-expect-error: typesugar types the fluent chain as `never` until it is expanded
++      .case("MultiPoint")
++      .then("Point")
++      .case("MultiLineString")
++      .then("LineString")
++      .case("MultiPolygon")
++      .then("Polygon")
++      // geomEach passes a GeometryCollection through only when it is nested
++      // three deep; v7.4.0's switch left geomType undefined for it too.
++      .case("GeometryCollection")
++      .then(undefined);
+```
+
+`packages/turf-meta/package.json` gains `"@typesugar/std": "0.1.1"` under
+`devDependencies`. Nothing in `dependencies` changes. Source lines changed:
+13 added and 13 removed in `index.ts`, plus 1 added in `package.json`.
+
+The match keeps v7.4.0's behaviour for every input. The `"GeometryCollection"`
+arm returns `undefined`, as the switch did by falling through. It covers the
+last member of the narrowed type, so the compiled code has no check for it.
+Any other runtime string (input that isn't GeoJSON) also gives `undefined`,
+as before. `case-study/experiments/stage-3-nested-geometry-collection.mjs`
+gives the same output on Stage 1 and Stage 3, and the micro-benchmark below
+first checks that all three builds pass the same arguments to the callback.
+
+#### Exhaustiveness: what the check found
+
+`type` there is `"MultiPoint" | "MultiLineString" | "MultiPolygon" |
+"GeometryCollection"`, narrowed by the `switch` just above, which returns for
+`null`, `Point`, `LineString` and `Polygon`. The literal translation of the
+switch, with only its three arms, fails the build:
+
+```
+✘ [ERROR] packages/turf-meta/index.ts:934:20: [typesugar] [typesugar] [TS9226]
+  Non-exhaustive match — missing cases: "GeometryCollection"
+  = help: Add the missing cases or use .else() / _ to handle remaining values.
+```
+
+The switch it replaced was silent about this. The gap is reachable.
+`geomEach` unwraps a GeometryCollection itself and unwraps one more level in
+its `"GeometryCollection"` arm. A collection nested a third level deep is
+therefore passed to `flattenEach`'s callback as a GeometryCollection. There
+`geomType` comes out `undefined`, and the loop reads
+`geometry.coordinates.length`
+(`case-study/experiments/stage-3-nested-geometry-collection.mjs`, identical
+output on v7.4.0, Stage 1 and Stage 3):
+
+```
+GC(GC(GC))  flattenEach  calls=0  THROWS: Cannot read properties of undefined (reading 'length')
+GC(GC(GC))  segmentEach  calls=0  THROWS: Cannot read properties of undefined (reading 'length')
+GC(GC(GC))  lineEach     calls=0  THROWS: Cannot read properties of undefined (reading 'length')
+GC(GC(GC))  coordEach    calls=3
+GC(GC(GC))  geomEach     calls=1
+```
+
+RFC 7946 says nested collections SHOULD be avoided, but they are valid
+GeoJSON. Fixing the throw would change behaviour, so this stage only makes the
+case explicit (F23).
+
+The same check can't help in the two hottest functions. In `coordEach` and
+`geomEach` the switched-on value is `any`, so `match()` there would need an
+`.else()` and would check nothing (F22).
+
+#### Why the other ten switches stayed
+
+| Function | Switch on | Static type | Why it stayed a `switch` |
+| --- | --- | --- | --- |
+| `coordEach` | `geomType` | `any` | Each arm is a loop that calls back, `return false`s from `coordEach`, and updates `coordIndex`, `multiFeatureIndex` and `geometryIndex`. `case null: break`, and `default: throw`. |
+| `propEach` | `geojson.type` | `"Feature" \| "FeatureCollection"` | The arms loop and call back, and `break` out of the loop. |
+| `geomEach` | `geometry.type` | `any` | Six types share one arm (`.or()` could say that), but the arm calls back and `return false`s from `geomEach`, and the `GeometryCollection` arm loops. `default: throw`. |
+| `flattenEach` (first) | `type` | all seven geometry types and `null` | Four types call back and `return` from the callback. Every other type falls out of the switch into the loop below it. |
+| `lineEach` | `type` | the four line and polygon types | The arms loop and `return false`. |
+| `findSegment`, `findPoint` (first switch each) | `geojson.type` | | The arms assign two locals, or `return null`, or `throw`. |
+| `findSegment`, `findPoint` (second switch each) | `geometry.type` | | Each arm normalises negative indexes in place and then returns, and an unmatched type falls through to a `throw`. A `match()` needs each arm as a single expression, so these would become nested ternaries, and JavaScript has no `throw` expression for the fall-through. |
+
+#### Zero cost
+
+1. **Emitted JS against hand-written.** Of 115 `dist` trees (691 files,
+   compared after normalising the absolute build path), only `turf-meta`'s
+   `index.js`, `index.cjs`, their two maps, and `turf.min.js` differ from
+   Stage 1. Every `.d.ts` is byte-identical. The semantic change in
+   `turf-meta/dist/esm/index.js` is exactly the one line, shown here with
+   both sides whitespace-minified
+   (`case-study/results/stage-3/emitted-code-semantic.diff`):
+
+   ```js
+   // Stage 1
+   var geomType;switch(type){case"MultiPoint":geomType="Point";break;case"MultiLineString":geomType="LineString";break;case"MultiPolygon":geomType="Polygon";break}
+   // Stage 3
+   var geomType=type==="MultiPoint"?"Point":type==="MultiLineString"?"LineString":type==="MultiPolygon"?"Polygon":void 0;
+   ```
+
+   It has no IIFE, no closure, no extra check and no import. The last arm
+   is unconditional, as the switch's fall-through was. A person could
+   reasonably have written either form, and terser keeps the chain as it is
+   in `turf.min.js` (`"MultiPoint"===s?"Point":…:void 0`). The full diff
+   (`.../emitted-code.diff`) is 612 lines: the file contains a macro, so it
+   is reprinted whole, and line breaks move in every function (F16). That
+   is all of the size change below. Comments inside the chain do not reach
+   the output.
+
+   With the typesugar Stage 1 vendored (`0411491c`), the same source
+   compiled to this (`.../unfixed-0411491c-turf-meta-index.js.txt`):
+
+   ```js
+   import { MatchError } from "@typesugar/std";
+   ...
+       var geomType = (() => {
+         const _type = type;
+         if (_type === "MultiPoint")
+           return "Point";
+         if (_type === "MultiLineString")
+           return "LineString";
+         if (_type === "MultiPolygon")
+           return "Polygon";
+         return void 0;
+         throw new MatchError(_type);
+       })();
+   ```
+
+   That is an arrow IIFE inside `flattenEach`'s per-geometry callback,
+   allocated on every call, and a `throw` that can never run. The throw
+   kept `MatchError`, so `@turf/meta`'s ESM and CJS builds imported
+   `@typesugar/std` at runtime, a package it lists only as a devDependency.
+   `leaks.mjs` would have failed the stage. F15 found the same IIFE shape
+   for `is<T>()`. Both problems are fixed in typesugar (F18, F19).
+2. **typesugar in the published output: none in JS or `.d.ts`.**
+   `leaks.mjs` scans 231 JS files and 230 declaration files and finds
+   nothing (`.../leaks.json`). As in Stage 1, the source maps for
+   `turf-meta` (ESM and CJS) embed the source, so they contain the text
+   `@typesugar/std`. Nothing resolves it.
+3. **Size.** `turf-meta`'s ESM entry: −1,063 B raw (−4.8%), −109 B gzip,
+   −88 B brotli. Whitespace-minified, the code is 47 B smaller, so the
+   rest is the reprint's line breaks (F16). `turf.min.js`: −21 B raw, −1 B
+   gzip, +61 B brotli. No other package's entry changed size
+   (`.../size-stage-1-vs-stage-3.md`).
+4. **Speed.** Three measurements, all one process at a time on a quiet
+   machine:
+
+   - **Turf's benches, Stage 1 against Stage 3** (5 interleaved rounds,
+     loader on both sides, 100 cases in 7 suites;
+     `.../bench-stage-1-vs-stage-3`, load average 3.8 at the start and 5.0
+     at the end). 100 of 100 deltas are smaller than their spread.
+
+     | Suite | Cases | Median Δ | Range | Within spread |
+     | --- | ---: | ---: | --- | ---: |
+     | `turf-meta` | 60 | −0.5% | −11.6% to +4.0% | 60 |
+     | `turf-bbox` (`coordEach`) | 1 | +0.2% | | 1 |
+     | `turf-centroid` (`coordEach`) | 5 | −0.0% | −0.6% to +1.0% | 5 |
+     | `turf-simplify` (`geomEach`) | 13 | +0.2% | −1.1% to +2.8% | 13 |
+     | `turf-length` (`segmentReduce` → `flattenEach`) | 6 | +0.5% | −1.1% to +1.6% | 6 |
+     | `turf-line-segment` (`flattenEach`) | 8 | +0.0% | −0.9% to +0.5% | 8 |
+     | `turf-flatten` (`flattenEach`) | 7 | −0.1% | −0.4% to +0.4% | 7 |
+
+     The last three suites have multi-geometry fixtures, so they reach the
+     changed line. `turf-meta`'s own bench does not (F24). Its larger
+     negative deltas (for example `findSegment - polygon` −11.6%) are in
+     functions whose code is unchanged apart from whitespace. They come from
+     the Stage 1 side running fast in two of its five rounds. In those
+     rounds the whole segment/flatten/find group was 15–70% faster at once
+     (spreads up to 90%). The Stage 3 side did not do that in this run, but
+     in the v7.4.0 run below both sides did, so it is how this suite behaves
+     on this machine, not an effect of either build. The suite imports
+     `index.ts` through the loader, so on Stage 3 the loader compiles the
+     file, while on Stage 1 it passes through to tsx (as in F17). The
+     medians ignore two outlier rounds.
+   - **Turf's benches, v7.4.0 against Stage 3** (same set and settings;
+     `.../bench-v7.4.0-vs-stage-3`). Load average 4.4 at the
+     start and 3.4 at the end. A first attempt was stopped and thrown away,
+     because the load average reached 268 during it, with Spotlight
+     indexing the bench worktrees. 100 of 100 deltas are smaller than their
+     spread. `turf-meta`: median −0.2%, range −19.8% to +11.5%, 60 of 60
+     within spread. The extremes are `featureEach`/`featureReduce - point`
+     (−20%, spreads 27–28%), whose code is unchanged, and they come from
+     fast rounds on both sides. Downstream, the median deltas were:
+     `turf-bbox` −0.4%, `turf-centroid` −0.2% (range −0.5% to +0.2%),
+     `turf-simplify` −0.2% (−1.3% to +0.7%), `turf-length` +0.3% (−0.1% to
+     +1.0%), `turf-line-segment` +0.1% (−0.6% to +0.5%) and `turf-flatten`
+     −0.2% (−0.4% to +0.3%).
+   - **The changed line itself**
+     (`case-study/experiments/stage-3-flatten-microbench.mjs`, 5 rounds,
+     each measurement in a fresh process, interleaved;
+     `.../flatten-microbench.txt`). `flattenEach` over MultiPoint,
+     MultiLineString and MultiPolygon features and a collection of 100 of
+     them, with four builds: v7.4.0's switch, the 0411491c IIFE, the
+     be4286d3 chain, and v7.4.0 again as a control.
+
+     | Fixture | v7.4.0 switch, ops/s | IIFE (0411491c) | chain (be4286d3) | v7.4.0 again |
+     | --- | ---: | ---: | ---: | ---: |
+     | MultiPoint | 10,997,148 | −0.1% | −2.0% | −0.3% |
+     | MultiLineString | 22,831,713 | +0.7% | +0.9% | −0.1% |
+     | MultiPolygon | 29,838,727 | +0.3% | −0.7% | −0.4% |
+     | 100 multi-geometries | 188,142 | +2.9% | +2.2% | +1.7% |
+
+     Every difference is within the control's noise and the 2–8% spreads.
+     The IIFE was not slower either, because V8 inlines it, as F15 found for
+     `is<T>()`. So the F18 fix is about the shape of the code and the import
+     it dragged in, not about speed. A first version of this script measured
+     the three builds one after another in one process. That said the
+     `match()` builds were 47–88% faster, and it said the same when all
+     three slots held the identical v7.4.0 file (F26). Stage 1's
+     `validateId` micro-benchmark was checked the same way: with v7.4.0's
+     file in both slots the gap is −0.4%, so its 2× result stands.
+
+Tests: the full suite (121 workspace packages through the loader,
+`pnpm -r --no-bail --workspace-concurrency=2 run test`) gives 2336 TAP
+results: 2332 pass, plus the same 4 known failures as v7.4.0
+(`directional-mean` gps and gps segment, `standard-deviational-ellipse`
+weighted and unweighted). `@turf/turf` last-checks: 252/252.
+`turf-meta`'s `test:types` passes, but only because of the
+`@ts-expect-error` (F20). Build and type-check time (median of 3, `turf-meta` alone, in the bench
+worktrees): tsup build (JS and `.d.ts`, through the loader) 1.64 s → 1.75 s;
+`tsc --noEmit --strict index.ts` 0.60 s → 0.62 s. The full `lerna run
+build --concurrency 4` took 81 s (a single run on a shared machine; Stage 1
+took 89 s).
+
+Adoption cost: 14 lines added and 13 removed, in 2 files under
+`packages/`, plus one devDependency. Friction:
+
+- Each switch had to be read for whether its arms are expressions. Only one
+  was.
+- The fluent chain has no types that plain `tsc` accepts (F20). It needs a
+  `@ts-expect-error`, and that also hides any real type error on that line.
+- The vendored typesugar's output for the one match that fit had to be read
+  before it could be trusted. It allocated a closure per call and imported
+  `@typesugar/std` at runtime (F18, F19). The fix, its tests and a repack
+  of the tarballs came before any measurement.
+- Exhaustiveness checks the declared type, not the paths that can actually
+  run. Here that found a real gap. In `lineEach` it would demand arms for
+  `MultiLineString` and `MultiPolygon`, which `flattenEach` has already
+  flattened away (F22).
+- The commit used `--no-verify` for the monorepolint complaint about
+  `case-study/package.json`, as in Stages 0 and 1. Prettier, eslint and
+  `test:types` pass on the changed files.
+
+New tooling: `case-study/experiments/stage-3-flatten-microbench.mjs` and
+`case-study/experiments/stage-3-nested-geometry-collection.mjs`.
+
 ## Findings
 
 _typesugar bugs, gaps and design lessons, each with a link to its fix or issue._
@@ -492,3 +779,97 @@ _typesugar bugs, gaps and design lessons, each with a link to its fix or issue._
   benches still matter as a control, because `bench.ts` imports the source
   through the loader: on the Stage 1 side `turf-helpers/index.ts` is compiled
   by typesugar's loader, and on the Stage 0 side it passes through to tsx.
+- **F18 (bug, fixed): a `match()` over plain literal arms compiled to an
+  arrow IIFE.** Only one literal arm plus `.else()` got a ternary. Anything
+  longer became `(() => { const _t = t; if (_t === …) return …; … })()`,
+  which allocates a closure on every evaluation. In `flattenEach` that is
+  once per multi-geometry, inside a callback. The guide documented `x ===
+  "ok" ? 200 : 500` for exactly this shape. Fix: arms that are all plain
+  literals (with `.or()` literals), ending in `.else()`, `_` or an arm that
+  completes a literal union, compile to a conditional chain. It applies when
+  the scrutinee is an identifier or `this`, or is read only once. A property
+  scrutinee tested more than once keeps the IIFE, since it may be a getter,
+  and the guide now says so. Commit
+  [`be4286d3`](https://github.com/typesugar/typesugar/commit/be4286d3) on
+  `case-study-fixes-2`, failing tests first, with a changeset. Matches that
+  bind names, have guards or use object patterns still compile to an IIFE.
+  That is F15's shape for `is<T>()`, and it is the general case.
+- **F19 (bug, fixed): a dead `throw new MatchError` put a runtime import
+  of `@typesugar/std` into the library.** When the last arm covered the rest
+  of a literal union, the IIFE still ended with `throw new
+  MatchError(_type)` after an unconditional `return`. The throw could never
+  run, but `MatchError` was imported, so `@turf/meta`'s ESM had `import {
+  MatchError } from "@typesugar/std"` and its CJS had
+  `require('@typesugar/std')`. The package declares `@typesugar/std` only as
+  a devDependency, so consumers would fail to load it. Fix: the generated
+  code ends at the first unconditional return (same commit as F18). The guide
+  also claimed that "even with compile-time exhaustiveness, the generated
+  code includes a terminal throw". That has never been true for literal
+  unions: the last arm takes any value outside the type. Discriminated-union
+  matches and the 7+ literal `switch` do keep a reachable `MatchError`, and
+  with it a runtime dependency on `@typesugar/std`. The guide now says that
+  too. Whether a library should depend on `@typesugar/std` for that safety
+  net, or get an inlined `throw new Error`, is a design call, so it is
+  recorded here and not changed.
+- **F20 (gap, open): plain `tsc` rejects every fluent `match()`.**
+  `@typesugar/std` declares the fluent overload as `match(value: unknown):
+  never`, so `.case` fails with TS2339 ("Property 'case' does not exist on
+  type 'never'"). typesugar's language-service plugin and `typesugar check`
+  suppress this (the `MacroCallChain` rule). Plain `tsc` doesn't, and Turf
+  checks with plain `tsc` twice: in `test:types`, and in tsup's `.d.ts`
+  build, which sees unexpanded source (F5). typesugar's own tsup guide sets
+  `dts: true` next to the esbuild plugin, and that combination fails the
+  build as soon as a file contains a fluent match. Workaround: one
+  `@ts-expect-error` per match. It also hides any real error on that line,
+  and `geomType` becomes `any`. A typed chain is not a quick fix. The last
+  `.then()` would need to be both the chain and the result, which TypeScript
+  can only express as an intersection (`R & Chain`), and that collapses to
+  `never` when a result is `undefined` or `null`, as it is here. Names bound
+  by patterns would still be TS2304 under plain `tsc`. Not filed yet.
+- **F21 (design limit): `match()` has no statement form.** `.then()` and
+  `.else()` each take one expression. So an arm can't loop, can't `return`
+  from the enclosing function, and can't `break` or `continue`. JavaScript has
+  no `throw` expression, so a `default: throw new Error(…)` can't be written
+  either. Ten of `turf-meta`'s eleven switches need at least one of these.
+  Traversal code like Turf's would need a statement-level match that
+  compiles to a `switch` with the arm bodies in place (no closures), with the
+  same exhaustiveness check. That is a new feature, so it is recorded here
+  and not built.
+- **F22 (limit): exhaustiveness is only as good as the scrutinee's type.**
+  In `coordEach` and `geomEach`, the two functions most of Turf runs through,
+  the switched-on value is `any`. It comes from untyped `var`s assigned
+  under `@ts-expect-error: Known type conflict`. A `match()` there would need
+  `.else()` and would check nothing. Typing those variables is a refactor of
+  its own. The check also follows declared types, not reachable paths:
+  `lineEach`'s callback is typed with all four line and polygon types, but
+  `flattenEach` has already split the multi ones, so an exhaustive match
+  there would demand two dead arms or an `.else()`.
+- **F23 (Turf, latent bug): `flattenEach`, `segmentEach` and `lineEach`
+  throw on a GeometryCollection nested three deep.** Found by `match()`'s
+  exhaustiveness check: the literal translation of `flattenEach`'s second switch failed with
+  TS9226 (missing `"GeometryCollection"`). `geomEach` hands a doubly nested
+  collection to the callback unflattened, `geomType` is `undefined`, and the
+  loop throws `TypeError: Cannot read properties of undefined (reading
+  'length')`. Same at v7.4.0
+  (`case-study/experiments/stage-3-nested-geometry-collection.mjs`). Kept as
+  is, because fixing it changes behaviour. It is worth reporting to Turf.
+- **F24 (method): `turf-meta`'s own bench never reaches the changed
+  line.** Its fixtures are Points and Polygons, and both return from
+  `flattenEach`'s first switch. `turf-length`, `turf-line-segment` and
+  `turf-flatten` have multi-geometry fixtures, so they were added to the
+  bench set, and the micro-benchmark measures the line itself (as F17 did
+  for `validateId`).
+- **F25 (cosmetic): diagnostics say `[typesugar] [typesugar] [TS9226]`.**
+  The core diagnostic's message already starts with `[typesugar]`, and
+  unplugin adds another (`unplugin.ts`, where it formats errors and
+  warnings). Not fixed, because it would mean a repack after the
+  measurements.
+- **F26 (method): never compare builds of the same function in one
+  process.** The first version of Stage 3's micro-benchmark measured three
+  `turf-meta` builds back to back in one process. It reported the two
+  `match()` builds 47–88% faster than v7.4.0. With the identical v7.4.0 file
+  loaded three times, the second and third copies were 50–92% faster too.
+  Whatever was measured first ran slower. Each measurement now gets a fresh
+  process, interleaved and rotated per round, and the comparison includes the
+  baseline twice as a control. Stage 1's in-process micro-benchmark passes
+  that control, so its result stands.
