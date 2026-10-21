@@ -1,0 +1,27 @@
+10:57  up 14 days, 10:23, 10 users, load averages: 2.62 4.08 14.47
+node v26.3.1, 5 rounds, one process per measurement, all builds passed the same callback arguments
+
+MultiPoint
+  v7.4.0 switch                median   10,997,148 ops/s (min-max 5.0%), 0.0% vs v7.4.0 switch
+  match() 0411491c (IIFE)      median   10,984,356 ops/s (min-max 2.6%), -0.1% vs v7.4.0 switch
+  match() be4286d3 (chain)     median   10,776,000 ops/s (min-max 2.3%), -2.0% vs v7.4.0 switch
+  v7.4.0 switch, again         median   10,964,020 ops/s (min-max 3.6%), -0.3% vs v7.4.0 switch
+
+MultiLineString
+  v7.4.0 switch                median   22,831,713 ops/s (min-max 3.2%), 0.0% vs v7.4.0 switch
+  match() 0411491c (IIFE)      median   22,995,813 ops/s (min-max 4.0%), 0.7% vs v7.4.0 switch
+  match() be4286d3 (chain)     median   23,038,998 ops/s (min-max 2.0%), 0.9% vs v7.4.0 switch
+  v7.4.0 switch, again         median   22,802,248 ops/s (min-max 1.9%), -0.1% vs v7.4.0 switch
+
+MultiPolygon
+  v7.4.0 switch                median   29,838,727 ops/s (min-max 3.4%), 0.0% vs v7.4.0 switch
+  match() 0411491c (IIFE)      median   29,928,909 ops/s (min-max 4.0%), 0.3% vs v7.4.0 switch
+  match() be4286d3 (chain)     median   29,629,965 ops/s (min-max 3.6%), -0.7% vs v7.4.0 switch
+  v7.4.0 switch, again         median   29,723,126 ops/s (min-max 1.1%), -0.4% vs v7.4.0 switch
+
+FeatureCollection of 100 multi-geometries
+  v7.4.0 switch                median      188,142 ops/s (min-max 5.8%), 0.0% vs v7.4.0 switch
+  match() 0411491c (IIFE)      median      193,626 ops/s (min-max 7.9%), 2.9% vs v7.4.0 switch
+  match() be4286d3 (chain)     median      192,246 ops/s (min-max 2.3%), 2.2% vs v7.4.0 switch
+  v7.4.0 switch, again         median      191,287 ops/s (min-max 2.2%), 1.7% vs v7.4.0 switch
+11:04  up 14 days, 10:30, 10 users, load averages: 3.68 4.55 10.73

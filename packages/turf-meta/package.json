@@ -75,6 +75,7 @@
     "@turf/random": "workspace:*",
     "@types/benchmark": "catalog:",
     "@types/tape": "catalog:",
+    "@typesugar/std": "0.1.1",
     "benchmark": "catalog:",
     "tape": "catalog:",
     "tsup": "catalog:",

@@ -1,0 +1,18 @@
+--- stage-1 turf-meta dist/esm/index.js (whitespace-minified)	2026-10-21 07:26:11
++++ stage-3 turf-meta dist/esm/index.js (whitespace-minified)	2026-10-21 07:26:11
+@@ -86,13 +86,8 @@
+ else previousValue=callback(previousValue,currentGeometry,featureIndex,featureProperties,featureBBox,featureId)});
+ return previousValue}function flattenEach(geojson,callback){geomEach(geojson,function(geometry,featureIndex,properties,bbox,id){var type=geometry===null?null:geometry.type;
+ switch(type){case null:case"Point":case"LineString":case"Polygon":if(callback(feature(geometry,properties,{bbox,id}),featureIndex,0)===false)return false;
+-return}var geomType;
+-switch(type){case"MultiPoint":geomType="Point";
+-break;
+-case"MultiLineString":geomType="LineString";
+-break;
+-case"MultiPolygon":geomType="Polygon";
+-break}for(var multiFeatureIndex=0;
++return}var geomType=type==="MultiPoint"?"Point":type==="MultiLineString"?"LineString":type==="MultiPolygon"?"Polygon":void 0;
++for(var multiFeatureIndex=0;
+ multiFeatureIndex<geometry.coordinates.length;
+ multiFeatureIndex++){var coordinate=geometry.coordinates[multiFeatureIndex];
+ var geom={type:geomType,coordinates:coordinate};

@@ -39,21 +39,21 @@ catalogs:
 
 overrides:
   documentation>vue-template-compiler: '-'
-  typesugar: file:vendor/typesugar/typesugar-0.1.1-0411491c.tgz
-  unplugin-typesugar: file:vendor/typesugar/unplugin-typesugar-0.1.1-0411491c.tgz
-  '@typesugar/core': file:vendor/typesugar/typesugar-core-0.1.1-0411491c.tgz
-  '@typesugar/macros': file:vendor/typesugar/typesugar-macros-0.1.1-0411491c.tgz
-  '@typesugar/transformer': file:vendor/typesugar/typesugar-transformer-0.1.1-0411491c.tgz
-  '@typesugar/transformer-core': file:vendor/typesugar/typesugar-transformer-core-0.1.1-0411491c.tgz
-  '@typesugar/lsp-common': file:vendor/typesugar/typesugar-lsp-common-0.1.1-0411491c.tgz
-  '@typesugar/reflect': file:vendor/typesugar/typesugar-reflect-0.1.1-0411491c.tgz
-  '@typesugar/derive': file:vendor/typesugar/typesugar-derive-0.1.1-0411491c.tgz
-  '@typesugar/typeclass': file:vendor/typesugar/typesugar-typeclass-0.1.1-0411491c.tgz
-  '@typesugar/type-system': file:vendor/typesugar/typesugar-type-system-0.1.1-0411491c.tgz
-  '@typesugar/std': file:vendor/typesugar/typesugar-std-0.1.1-0411491c.tgz
-  '@typesugar/fp': file:vendor/typesugar/typesugar-fp-0.1.1-0411491c.tgz
-  '@typesugar/contracts': file:vendor/typesugar/typesugar-contracts-0.1.1-0411491c.tgz
-  '@typesugar/validate': file:vendor/typesugar/typesugar-validate-0.1.1-0411491c.tgz
+  typesugar: file:vendor/typesugar/typesugar-0.1.1-be4286d3.tgz
+  unplugin-typesugar: file:vendor/typesugar/unplugin-typesugar-0.1.1-be4286d3.tgz
+  '@typesugar/core': file:vendor/typesugar/typesugar-core-0.1.1-be4286d3.tgz
+  '@typesugar/macros': file:vendor/typesugar/typesugar-macros-0.1.1-be4286d3.tgz
+  '@typesugar/transformer': file:vendor/typesugar/typesugar-transformer-0.1.1-be4286d3.tgz
+  '@typesugar/transformer-core': file:vendor/typesugar/typesugar-transformer-core-0.1.1-be4286d3.tgz
+  '@typesugar/lsp-common': file:vendor/typesugar/typesugar-lsp-common-0.1.1-be4286d3.tgz
+  '@typesugar/reflect': file:vendor/typesugar/typesugar-reflect-0.1.1-be4286d3.tgz
+  '@typesugar/derive': file:vendor/typesugar/typesugar-derive-0.1.1-be4286d3.tgz
+  '@typesugar/typeclass': file:vendor/typesugar/typesugar-typeclass-0.1.1-be4286d3.tgz
+  '@typesugar/type-system': file:vendor/typesugar/typesugar-type-system-0.1.1-be4286d3.tgz
+  '@typesugar/std': file:vendor/typesugar/typesugar-std-0.1.1-be4286d3.tgz
+  '@typesugar/fp': file:vendor/typesugar/typesugar-fp-0.1.1-be4286d3.tgz
+  '@typesugar/contracts': file:vendor/typesugar/typesugar-contracts-0.1.1-be4286d3.tgz
+  '@typesugar/validate': file:vendor/typesugar/typesugar-validate-0.1.1-be4286d3.tgz
 
 importers:
 
@@ -156,11 +156,11 @@ importers:
   case-study:
     devDependencies:
       typesugar:
-        specifier: file:../vendor/typesugar/typesugar-0.1.1-0411491c.tgz
-        version: file:vendor/typesugar/typesugar-0.1.1-0411491c.tgz(rollup@4.62.2)(typescript@5.9.3)
+        specifier: file:../vendor/typesugar/typesugar-0.1.1-be4286d3.tgz
+        version: file:vendor/typesugar/typesugar-0.1.1-be4286d3.tgz(rollup@4.62.2)(typescript@5.9.3)
       unplugin-typesugar:
-        specifier: file:../vendor/typesugar/unplugin-typesugar-0.1.1-0411491c.tgz
-        version: file:vendor/typesugar/unplugin-typesugar-0.1.1-0411491c.tgz(rollup@4.62.2)(typescript@5.9.3)
+        specifier: file:../vendor/typesugar/unplugin-typesugar-0.1.1-be4286d3.tgz
+        version: file:vendor/typesugar/unplugin-typesugar-0.1.1-be4286d3.tgz(rollup@4.62.2)(typescript@5.9.3)
 
   packages/turf:
     dependencies:
@@ -3107,8 +3107,8 @@ importers:
         specifier: 'catalog:'
         version: 5.8.1
       '@typesugar/validate':
-        specifier: file:../../vendor/typesugar/typesugar-validate-0.1.1-0411491c.tgz
-        version: file:vendor/typesugar/typesugar-validate-0.1.1-0411491c.tgz(typescript@5.9.3)
+        specifier: file:../../vendor/typesugar/typesugar-validate-0.1.1-be4286d3.tgz
+        version: file:vendor/typesugar/typesugar-validate-0.1.1-be4286d3.tgz(typescript@5.9.3)
       benchmark:
         specifier: 'catalog:'
         version: 2.1.4
@@ -4158,6 +4158,9 @@ importers:
       '@types/tape':
         specifier: 'catalog:'
         version: 5.8.1
+      '@typesugar/std':
+        specifier: file:../../vendor/typesugar/typesugar-std-0.1.1-be4286d3.tgz
+        version: file:vendor/typesugar/typesugar-std-0.1.1-be4286d3.tgz(typescript@5.9.3)
       benchmark:
         specifier: 'catalog:'
         version: 2.1.4
@@ -8232,8 +8235,8 @@ packages:
     resolution: {integrity: sha512-4g3BLxfdTMy8iZG0MaBkadnlRrCJ74cQiFbyEVMrkwIoqdyaXXQM22cotDvrl4x28wgIZ9rEJRoM+mmhSJpJ1g==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@typesugar/contracts@file:vendor/typesugar/typesugar-contracts-0.1.1-0411491c.tgz':
-    resolution: {integrity: sha512-9gpe3Zbw5NM4e1hef6N4DIbRhLQLKagE4mmBAmxQaq9pmTOznECOvEsHzdO2zlfha//xqig40tjwZqfwSC/mTA==, tarball: file:vendor/typesugar/typesugar-contracts-0.1.1-0411491c.tgz}
+  '@typesugar/contracts@file:vendor/typesugar/typesugar-contracts-0.1.1-be4286d3.tgz':
+    resolution: {integrity: sha512-9gpe3Zbw5NM4e1hef6N4DIbRhLQLKagE4mmBAmxQaq9pmTOznECOvEsHzdO2zlfha//xqig40tjwZqfwSC/mTA==, tarball: file:vendor/typesugar/typesugar-contracts-0.1.1-be4286d3.tgz}
     version: 0.1.1
     engines: {node: '>=20'}
     peerDependencies:
@@ -8242,22 +8245,22 @@ packages:
       typescript:
         optional: true
 
-  '@typesugar/core@file:vendor/typesugar/typesugar-core-0.1.1-0411491c.tgz':
-    resolution: {integrity: sha512-dYrIQwwIGgOWlKy2sdp83k4OS93BFuB8wg1VhT6qQ8VzQbem9VmjYv7gFEDKgtlOOZYcTlw6Xs8MrjeAqOs4Mg==, tarball: file:vendor/typesugar/typesugar-core-0.1.1-0411491c.tgz}
+  '@typesugar/core@file:vendor/typesugar/typesugar-core-0.1.1-be4286d3.tgz':
+    resolution: {integrity: sha512-dYrIQwwIGgOWlKy2sdp83k4OS93BFuB8wg1VhT6qQ8VzQbem9VmjYv7gFEDKgtlOOZYcTlw6Xs8MrjeAqOs4Mg==, tarball: file:vendor/typesugar/typesugar-core-0.1.1-be4286d3.tgz}
     version: 0.1.1
     engines: {node: '>=20'}
     peerDependencies:
       typescript: '>=5.9.0 <7.0.0'
 
-  '@typesugar/derive@file:vendor/typesugar/typesugar-derive-0.1.1-0411491c.tgz':
-    resolution: {integrity: sha512-qRVWYIgHFcxieoy9N2rfbaNnOX7cP+t6iq1AuQ9wiler4c6NCa8xAa1njUFVKpL+WEV+KHFQmjR3nlakgBud0A==, tarball: file:vendor/typesugar/typesugar-derive-0.1.1-0411491c.tgz}
+  '@typesugar/derive@file:vendor/typesugar/typesugar-derive-0.1.1-be4286d3.tgz':
+    resolution: {integrity: sha512-qRVWYIgHFcxieoy9N2rfbaNnOX7cP+t6iq1AuQ9wiler4c6NCa8xAa1njUFVKpL+WEV+KHFQmjR3nlakgBud0A==, tarball: file:vendor/typesugar/typesugar-derive-0.1.1-be4286d3.tgz}
     version: 0.1.1
     engines: {node: '>=20'}
     peerDependencies:
       typescript: '>=5.9.0 <7.0.0'
 
-  '@typesugar/fp@file:vendor/typesugar/typesugar-fp-0.1.1-0411491c.tgz':
-    resolution: {integrity: sha512-0OCxX19AScPBYkrK3CNX2q7wgnUPWwgkBBzDCnj2yr0EJetZ8Jsov82izy01BZO5Vgj5EcwXuj4SDk4CmhKM0g==, tarball: file:vendor/typesugar/typesugar-fp-0.1.1-0411491c.tgz}
+  '@typesugar/fp@file:vendor/typesugar/typesugar-fp-0.1.1-be4286d3.tgz':
+    resolution: {integrity: sha512-0OCxX19AScPBYkrK3CNX2q7wgnUPWwgkBBzDCnj2yr0EJetZ8Jsov82izy01BZO5Vgj5EcwXuj4SDk4CmhKM0g==, tarball: file:vendor/typesugar/typesugar-fp-0.1.1-be4286d3.tgz}
     version: 0.1.1
     engines: {node: '>=20'}
     peerDependencies:
@@ -8266,58 +8269,65 @@ packages:
       typescript:
         optional: true
 
-  '@typesugar/lsp-common@file:vendor/typesugar/typesugar-lsp-common-0.1.1-0411491c.tgz':
-    resolution: {integrity: sha512-VqmA4aoe8T5U/vcmNGPrY/duaXeCQa5tzbZto8MvUsU2Otkdg9re9W4c3ZeKhCCLHv0r3eLx0fSkDN5O+1I9cA==, tarball: file:vendor/typesugar/typesugar-lsp-common-0.1.1-0411491c.tgz}
+  '@typesugar/lsp-common@file:vendor/typesugar/typesugar-lsp-common-0.1.1-be4286d3.tgz':
+    resolution: {integrity: sha512-VqmA4aoe8T5U/vcmNGPrY/duaXeCQa5tzbZto8MvUsU2Otkdg9re9W4c3ZeKhCCLHv0r3eLx0fSkDN5O+1I9cA==, tarball: file:vendor/typesugar/typesugar-lsp-common-0.1.1-be4286d3.tgz}
     version: 0.1.1
     engines: {node: '>=20'}
     peerDependencies:
       typescript: '>=5.9.0 <7.0.0'
 
-  '@typesugar/macros@file:vendor/typesugar/typesugar-macros-0.1.1-0411491c.tgz':
-    resolution: {integrity: sha512-tIu51drAIOb9wJNYj9htxwV1mVlKl+0hE9w55mB8POa+4pt2rRZ6oJ2oL0LVAy5+NcniBpV0zv4K7QyJHl3UOw==, tarball: file:vendor/typesugar/typesugar-macros-0.1.1-0411491c.tgz}
+  '@typesugar/macros@file:vendor/typesugar/typesugar-macros-0.1.1-be4286d3.tgz':
+    resolution: {integrity: sha512-DrqQsXqS8abYCrqFM9mLvxIUzYd03qlB3m86xRbIlVJINOsl7br/nmrMX3yHoh/qdg3LCAODhnt06SBvKmNt0A==, tarball: file:vendor/typesugar/typesugar-macros-0.1.1-be4286d3.tgz}
     version: 0.1.1
     engines: {node: '>=20'}
     peerDependencies:
       typescript: '>=5.9.0 <7.0.0'
 
-  '@typesugar/reflect@file:vendor/typesugar/typesugar-reflect-0.1.1-0411491c.tgz':
-    resolution: {integrity: sha512-bTZWpFEwcz1dmKxIkY0OI9NRWjhm2aM3rvowpVaKqHsCIh790GnUxNEc/n5iK9NPbvXZfbJenY+51WWEDKmNdw==, tarball: file:vendor/typesugar/typesugar-reflect-0.1.1-0411491c.tgz}
+  '@typesugar/reflect@file:vendor/typesugar/typesugar-reflect-0.1.1-be4286d3.tgz':
+    resolution: {integrity: sha512-bTZWpFEwcz1dmKxIkY0OI9NRWjhm2aM3rvowpVaKqHsCIh790GnUxNEc/n5iK9NPbvXZfbJenY+51WWEDKmNdw==, tarball: file:vendor/typesugar/typesugar-reflect-0.1.1-be4286d3.tgz}
     version: 0.1.1
     engines: {node: '>=20'}
     peerDependencies:
       typescript: '>=5.9.0 <7.0.0'
 
-  '@typesugar/transformer-core@file:vendor/typesugar/typesugar-transformer-core-0.1.1-0411491c.tgz':
-    resolution: {integrity: sha512-edYA5QVm00u6qpDfUHrXLkk6q41g7HZqwwtc/2pLXJWZ66rtpb1iEDq0gAm7lZxr5j00Efx9xUl+V5V5tZEzuA==, tarball: file:vendor/typesugar/typesugar-transformer-core-0.1.1-0411491c.tgz}
+  '@typesugar/std@file:vendor/typesugar/typesugar-std-0.1.1-be4286d3.tgz':
+    resolution: {integrity: sha512-dE5EGgDN3W2oiqccZXztVkgkFD9i0j2XJkkon1tdySzGECHzoVyvp68ddP+FH/KZtEWShMakXoSEWMRvw3nLkA==, tarball: file:vendor/typesugar/typesugar-std-0.1.1-be4286d3.tgz}
     version: 0.1.1
     engines: {node: '>=20'}
     peerDependencies:
       typescript: '>=5.9.0 <7.0.0'
 
-  '@typesugar/transformer@file:vendor/typesugar/typesugar-transformer-0.1.1-0411491c.tgz':
-    resolution: {integrity: sha512-GuYnTN7oTj/QUTxgriKynpOuG+eJnrrXEQLnW4OVTlKcrz2fIscTx026pzTHfIafPNwE45vKGG2nVXSHAYdbpQ==, tarball: file:vendor/typesugar/typesugar-transformer-0.1.1-0411491c.tgz}
+  '@typesugar/transformer-core@file:vendor/typesugar/typesugar-transformer-core-0.1.1-be4286d3.tgz':
+    resolution: {integrity: sha512-edYA5QVm00u6qpDfUHrXLkk6q41g7HZqwwtc/2pLXJWZ66rtpb1iEDq0gAm7lZxr5j00Efx9xUl+V5V5tZEzuA==, tarball: file:vendor/typesugar/typesugar-transformer-core-0.1.1-be4286d3.tgz}
+    version: 0.1.1
+    engines: {node: '>=20'}
+    peerDependencies:
+      typescript: '>=5.9.0 <7.0.0'
+
+  '@typesugar/transformer@file:vendor/typesugar/typesugar-transformer-0.1.1-be4286d3.tgz':
+    resolution: {integrity: sha512-h7s6pFkyDuGIR0GaQJj1stPMaClzgvJz8KClLid5BCtWlCVhLJmn/2okU5pHOwZs6AScxD0cJXMxISnpuolCNw==, tarball: file:vendor/typesugar/typesugar-transformer-0.1.1-be4286d3.tgz}
     version: 0.1.1
     engines: {node: '>=20'}
     hasBin: true
     peerDependencies:
       typescript: '>=5.9.0 <7.0.0'
 
-  '@typesugar/type-system@file:vendor/typesugar/typesugar-type-system-0.1.1-0411491c.tgz':
-    resolution: {integrity: sha512-4I2IsxgUqtlshg5CWx89j8Qa+FVa99xkuglOB15WcgZCRlZtZmIqjw7rBTAytaOQ71zVWhQQDMCkae+sqNkzPw==, tarball: file:vendor/typesugar/typesugar-type-system-0.1.1-0411491c.tgz}
+  '@typesugar/type-system@file:vendor/typesugar/typesugar-type-system-0.1.1-be4286d3.tgz':
+    resolution: {integrity: sha512-4I2IsxgUqtlshg5CWx89j8Qa+FVa99xkuglOB15WcgZCRlZtZmIqjw7rBTAytaOQ71zVWhQQDMCkae+sqNkzPw==, tarball: file:vendor/typesugar/typesugar-type-system-0.1.1-be4286d3.tgz}
     version: 0.1.1
     engines: {node: '>=20'}
     peerDependencies:
       typescript: '>=5.9.0 <7.0.0'
 
-  '@typesugar/typeclass@file:vendor/typesugar/typesugar-typeclass-0.1.1-0411491c.tgz':
-    resolution: {integrity: sha512-D3Od1D7wO+R6If6EYNDXMo4LqWxNcc6UjBmgQOcEidPY0+lQ+p7F7Wzl+TJzKueCw1AuG2YBcG99Jt8DeoUh+A==, tarball: file:vendor/typesugar/typesugar-typeclass-0.1.1-0411491c.tgz}
+  '@typesugar/typeclass@file:vendor/typesugar/typesugar-typeclass-0.1.1-be4286d3.tgz':
+    resolution: {integrity: sha512-D3Od1D7wO+R6If6EYNDXMo4LqWxNcc6UjBmgQOcEidPY0+lQ+p7F7Wzl+TJzKueCw1AuG2YBcG99Jt8DeoUh+A==, tarball: file:vendor/typesugar/typesugar-typeclass-0.1.1-be4286d3.tgz}
     version: 0.1.1
     engines: {node: '>=20'}
     peerDependencies:
       typescript: '>=5.9.0 <7.0.0'
 
-  '@typesugar/validate@file:vendor/typesugar/typesugar-validate-0.1.1-0411491c.tgz':
-    resolution: {integrity: sha512-obvQq2v6gM4oZQ54xNwpB5EDnHRYm0+G4BEvKlWndVGvGS89gDFcfppmDZiAdRICIqpyb0neta8OhU71PAirkQ==, tarball: file:vendor/typesugar/typesugar-validate-0.1.1-0411491c.tgz}
+  '@typesugar/validate@file:vendor/typesugar/typesugar-validate-0.1.1-be4286d3.tgz':
+    resolution: {integrity: sha512-1t7q8nen4LnhbfTQlSnrgP40FI3WtkVDBj0XFykpQqEz6bObXrI9KVTg4GVc8V8vs0TEkQOkPmWqpREC9ljABA==, tarball: file:vendor/typesugar/typesugar-validate-0.1.1-be4286d3.tgz}
     version: 0.1.1
     engines: {node: '>=20'}
     peerDependencies:
@@ -11746,8 +11756,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  typesugar@file:vendor/typesugar/typesugar-0.1.1-0411491c.tgz:
-    resolution: {integrity: sha512-It4FyvDA7/ntTBtxbz+toUa8c2WGZJCeiJwyk2N9FUPjD1BNJykjBEwoNZvZns17q0OqNhKYbKEK6qnmYmo9zA==, tarball: file:vendor/typesugar/typesugar-0.1.1-0411491c.tgz}
+  typesugar@file:vendor/typesugar/typesugar-0.1.1-be4286d3.tgz:
+    resolution: {integrity: sha512-tFDS+I+aECg7Z1EUNL9GbAFHkvM16UYu00DR8UHCsWyFWdtpA4R7uETHoH2r1JePdbnipbHbNZ6UFK3Lo/QoWw==, tarball: file:vendor/typesugar/typesugar-0.1.1-be4286d3.tgz}
     version: 0.1.1
     engines: {node: '>=20'}
     hasBin: true
@@ -11835,8 +11845,8 @@ packages:
     resolution: {integrity: sha512-gptHNQghINnc/vTGIk0SOFGFNXw7JVrlRUtConJRlvaw6DuX0wO5Jeko9sWrMBhh+PsYAZ7oXAiOnf/UKogyiw==}
     engines: {node: '>= 10.0.0'}
 
-  unplugin-typesugar@file:vendor/typesugar/unplugin-typesugar-0.1.1-0411491c.tgz:
-    resolution: {integrity: sha512-6tAyiS5juj6o/nkbvTOEWGsoreajv2gWFOo12YC2xHt0NEAcT83C4Zy7kwMiBg5DdUqWOWqwmGjbhTKLjeO/Sw==, tarball: file:vendor/typesugar/unplugin-typesugar-0.1.1-0411491c.tgz}
+  unplugin-typesugar@file:vendor/typesugar/unplugin-typesugar-0.1.1-be4286d3.tgz:
+    resolution: {integrity: sha512-6tAyiS5juj6o/nkbvTOEWGsoreajv2gWFOo12YC2xHt0NEAcT83C4Zy7kwMiBg5DdUqWOWqwmGjbhTKLjeO/Sw==, tarball: file:vendor/typesugar/unplugin-typesugar-0.1.1-be4286d3.tgz}
     version: 0.1.1
     engines: {node: '>=20'}
     peerDependencies:
@@ -13926,82 +13936,90 @@ snapshots:
       '@typescript-eslint/types': 8.62.1
       eslint-visitor-keys: 5.0.1
 
-  '@typesugar/contracts@file:vendor/typesugar/typesugar-contracts-0.1.1-0411491c.tgz(typescript@5.9.3)':
+  '@typesugar/contracts@file:vendor/typesugar/typesugar-contracts-0.1.1-be4286d3.tgz(typescript@5.9.3)':
     dependencies:
-      '@typesugar/core': file:vendor/typesugar/typesugar-core-0.1.1-0411491c.tgz(typescript@5.9.3)
-      '@typesugar/type-system': file:vendor/typesugar/typesugar-type-system-0.1.1-0411491c.tgz(typescript@5.9.3)
+      '@typesugar/core': file:vendor/typesugar/typesugar-core-0.1.1-be4286d3.tgz(typescript@5.9.3)
+      '@typesugar/type-system': file:vendor/typesugar/typesugar-type-system-0.1.1-be4286d3.tgz(typescript@5.9.3)
     optionalDependencies:
       typescript: 5.9.3
 
-  '@typesugar/core@file:vendor/typesugar/typesugar-core-0.1.1-0411491c.tgz(typescript@5.9.3)':
+  '@typesugar/core@file:vendor/typesugar/typesugar-core-0.1.1-be4286d3.tgz(typescript@5.9.3)':
     dependencies:
       cosmiconfig: 9.0.0(typescript@5.9.3)
       magic-string: 0.30.21
       typescript: 5.9.3
 
-  '@typesugar/derive@file:vendor/typesugar/typesugar-derive-0.1.1-0411491c.tgz(typescript@5.9.3)':
+  '@typesugar/derive@file:vendor/typesugar/typesugar-derive-0.1.1-be4286d3.tgz(typescript@5.9.3)':
     dependencies:
-      '@typesugar/macros': file:vendor/typesugar/typesugar-macros-0.1.1-0411491c.tgz(typescript@5.9.3)
+      '@typesugar/macros': file:vendor/typesugar/typesugar-macros-0.1.1-be4286d3.tgz(typescript@5.9.3)
       typescript: 5.9.3
 
-  '@typesugar/fp@file:vendor/typesugar/typesugar-fp-0.1.1-0411491c.tgz(typescript@5.9.3)':
+  '@typesugar/fp@file:vendor/typesugar/typesugar-fp-0.1.1-be4286d3.tgz(typescript@5.9.3)':
     dependencies:
-      '@typesugar/contracts': file:vendor/typesugar/typesugar-contracts-0.1.1-0411491c.tgz(typescript@5.9.3)
-      '@typesugar/core': file:vendor/typesugar/typesugar-core-0.1.1-0411491c.tgz(typescript@5.9.3)
-      '@typesugar/macros': file:vendor/typesugar/typesugar-macros-0.1.1-0411491c.tgz(typescript@5.9.3)
-      '@typesugar/type-system': file:vendor/typesugar/typesugar-type-system-0.1.1-0411491c.tgz(typescript@5.9.3)
+      '@typesugar/contracts': file:vendor/typesugar/typesugar-contracts-0.1.1-be4286d3.tgz(typescript@5.9.3)
+      '@typesugar/core': file:vendor/typesugar/typesugar-core-0.1.1-be4286d3.tgz(typescript@5.9.3)
+      '@typesugar/macros': file:vendor/typesugar/typesugar-macros-0.1.1-be4286d3.tgz(typescript@5.9.3)
+      '@typesugar/type-system': file:vendor/typesugar/typesugar-type-system-0.1.1-be4286d3.tgz(typescript@5.9.3)
     optionalDependencies:
       typescript: 5.9.3
 
-  '@typesugar/lsp-common@file:vendor/typesugar/typesugar-lsp-common-0.1.1-0411491c.tgz(typescript@5.9.3)':
+  '@typesugar/lsp-common@file:vendor/typesugar/typesugar-lsp-common-0.1.1-be4286d3.tgz(typescript@5.9.3)':
     dependencies:
-      '@typesugar/core': file:vendor/typesugar/typesugar-core-0.1.1-0411491c.tgz(typescript@5.9.3)
+      '@typesugar/core': file:vendor/typesugar/typesugar-core-0.1.1-be4286d3.tgz(typescript@5.9.3)
       typescript: 5.9.3
 
-  '@typesugar/macros@file:vendor/typesugar/typesugar-macros-0.1.1-0411491c.tgz(typescript@5.9.3)':
+  '@typesugar/macros@file:vendor/typesugar/typesugar-macros-0.1.1-be4286d3.tgz(typescript@5.9.3)':
     dependencies:
-      '@typesugar/core': file:vendor/typesugar/typesugar-core-0.1.1-0411491c.tgz(typescript@5.9.3)
+      '@typesugar/core': file:vendor/typesugar/typesugar-core-0.1.1-be4286d3.tgz(typescript@5.9.3)
       typescript: 5.9.3
 
-  '@typesugar/reflect@file:vendor/typesugar/typesugar-reflect-0.1.1-0411491c.tgz(typescript@5.9.3)':
+  '@typesugar/reflect@file:vendor/typesugar/typesugar-reflect-0.1.1-be4286d3.tgz(typescript@5.9.3)':
     dependencies:
-      '@typesugar/macros': file:vendor/typesugar/typesugar-macros-0.1.1-0411491c.tgz(typescript@5.9.3)
+      '@typesugar/macros': file:vendor/typesugar/typesugar-macros-0.1.1-be4286d3.tgz(typescript@5.9.3)
       typescript: 5.9.3
 
-  '@typesugar/transformer-core@file:vendor/typesugar/typesugar-transformer-core-0.1.1-0411491c.tgz(typescript@5.9.3)':
+  '@typesugar/std@file:vendor/typesugar/typesugar-std-0.1.1-be4286d3.tgz(typescript@5.9.3)':
+    dependencies:
+      '@typesugar/core': file:vendor/typesugar/typesugar-core-0.1.1-be4286d3.tgz(typescript@5.9.3)
+      '@typesugar/macros': file:vendor/typesugar/typesugar-macros-0.1.1-be4286d3.tgz(typescript@5.9.3)
+      '@typesugar/type-system': file:vendor/typesugar/typesugar-type-system-0.1.1-be4286d3.tgz(typescript@5.9.3)
+      '@typesugar/typeclass': file:vendor/typesugar/typesugar-typeclass-0.1.1-be4286d3.tgz(typescript@5.9.3)
+      typescript: 5.9.3
+
+  '@typesugar/transformer-core@file:vendor/typesugar/typesugar-transformer-core-0.1.1-be4286d3.tgz(typescript@5.9.3)':
     dependencies:
       '@ampproject/remapping': 2.3.0
-      '@typesugar/core': file:vendor/typesugar/typesugar-core-0.1.1-0411491c.tgz(typescript@5.9.3)
-      '@typesugar/macros': file:vendor/typesugar/typesugar-macros-0.1.1-0411491c.tgz(typescript@5.9.3)
+      '@typesugar/core': file:vendor/typesugar/typesugar-core-0.1.1-be4286d3.tgz(typescript@5.9.3)
+      '@typesugar/macros': file:vendor/typesugar/typesugar-macros-0.1.1-be4286d3.tgz(typescript@5.9.3)
       typescript: 5.9.3
 
-  '@typesugar/transformer@file:vendor/typesugar/typesugar-transformer-0.1.1-0411491c.tgz(typescript@5.9.3)':
+  '@typesugar/transformer@file:vendor/typesugar/typesugar-transformer-0.1.1-be4286d3.tgz(typescript@5.9.3)':
     dependencies:
       '@ampproject/remapping': 2.3.0
-      '@typesugar/core': file:vendor/typesugar/typesugar-core-0.1.1-0411491c.tgz(typescript@5.9.3)
-      '@typesugar/lsp-common': file:vendor/typesugar/typesugar-lsp-common-0.1.1-0411491c.tgz(typescript@5.9.3)
-      '@typesugar/macros': file:vendor/typesugar/typesugar-macros-0.1.1-0411491c.tgz(typescript@5.9.3)
-      '@typesugar/transformer-core': file:vendor/typesugar/typesugar-transformer-core-0.1.1-0411491c.tgz(typescript@5.9.3)
+      '@typesugar/core': file:vendor/typesugar/typesugar-core-0.1.1-be4286d3.tgz(typescript@5.9.3)
+      '@typesugar/lsp-common': file:vendor/typesugar/typesugar-lsp-common-0.1.1-be4286d3.tgz(typescript@5.9.3)
+      '@typesugar/macros': file:vendor/typesugar/typesugar-macros-0.1.1-be4286d3.tgz(typescript@5.9.3)
+      '@typesugar/transformer-core': file:vendor/typesugar/typesugar-transformer-core-0.1.1-be4286d3.tgz(typescript@5.9.3)
       esbuild: 0.20.2
       magic-string: 0.30.21
       typescript: 5.9.3
       xxhash-wasm: 1.1.0
 
-  '@typesugar/type-system@file:vendor/typesugar/typesugar-type-system-0.1.1-0411491c.tgz(typescript@5.9.3)':
+  '@typesugar/type-system@file:vendor/typesugar/typesugar-type-system-0.1.1-be4286d3.tgz(typescript@5.9.3)':
     dependencies:
-      '@typesugar/core': file:vendor/typesugar/typesugar-core-0.1.1-0411491c.tgz(typescript@5.9.3)
+      '@typesugar/core': file:vendor/typesugar/typesugar-core-0.1.1-be4286d3.tgz(typescript@5.9.3)
       typescript: 5.9.3
 
-  '@typesugar/typeclass@file:vendor/typesugar/typesugar-typeclass-0.1.1-0411491c.tgz(typescript@5.9.3)':
+  '@typesugar/typeclass@file:vendor/typesugar/typesugar-typeclass-0.1.1-be4286d3.tgz(typescript@5.9.3)':
     dependencies:
-      '@typesugar/macros': file:vendor/typesugar/typesugar-macros-0.1.1-0411491c.tgz(typescript@5.9.3)
+      '@typesugar/macros': file:vendor/typesugar/typesugar-macros-0.1.1-be4286d3.tgz(typescript@5.9.3)
       typescript: 5.9.3
 
-  '@typesugar/validate@file:vendor/typesugar/typesugar-validate-0.1.1-0411491c.tgz(typescript@5.9.3)':
+  '@typesugar/validate@file:vendor/typesugar/typesugar-validate-0.1.1-be4286d3.tgz(typescript@5.9.3)':
     dependencies:
-      '@typesugar/core': file:vendor/typesugar/typesugar-core-0.1.1-0411491c.tgz(typescript@5.9.3)
-      '@typesugar/fp': file:vendor/typesugar/typesugar-fp-0.1.1-0411491c.tgz(typescript@5.9.3)
-      '@typesugar/type-system': file:vendor/typesugar/typesugar-type-system-0.1.1-0411491c.tgz(typescript@5.9.3)
+      '@typesugar/core': file:vendor/typesugar/typesugar-core-0.1.1-be4286d3.tgz(typescript@5.9.3)
+      '@typesugar/fp': file:vendor/typesugar/typesugar-fp-0.1.1-be4286d3.tgz(typescript@5.9.3)
+      '@typesugar/type-system': file:vendor/typesugar/typesugar-type-system-0.1.1-be4286d3.tgz(typescript@5.9.3)
     optionalDependencies:
       typescript: 5.9.3
 
@@ -18217,16 +18235,16 @@ snapshots:
 
   typescript@5.9.3: {}
 
-  typesugar@file:vendor/typesugar/typesugar-0.1.1-0411491c.tgz(rollup@4.62.2)(typescript@5.9.3):
+  typesugar@file:vendor/typesugar/typesugar-0.1.1-be4286d3.tgz(rollup@4.62.2)(typescript@5.9.3):
     dependencies:
-      '@typesugar/core': file:vendor/typesugar/typesugar-core-0.1.1-0411491c.tgz(typescript@5.9.3)
-      '@typesugar/derive': file:vendor/typesugar/typesugar-derive-0.1.1-0411491c.tgz(typescript@5.9.3)
-      '@typesugar/macros': file:vendor/typesugar/typesugar-macros-0.1.1-0411491c.tgz(typescript@5.9.3)
-      '@typesugar/reflect': file:vendor/typesugar/typesugar-reflect-0.1.1-0411491c.tgz(typescript@5.9.3)
-      '@typesugar/transformer': file:vendor/typesugar/typesugar-transformer-0.1.1-0411491c.tgz(typescript@5.9.3)
-      '@typesugar/type-system': file:vendor/typesugar/typesugar-type-system-0.1.1-0411491c.tgz(typescript@5.9.3)
-      '@typesugar/typeclass': file:vendor/typesugar/typesugar-typeclass-0.1.1-0411491c.tgz(typescript@5.9.3)
-      unplugin-typesugar: file:vendor/typesugar/unplugin-typesugar-0.1.1-0411491c.tgz(rollup@4.62.2)(typescript@5.9.3)
+      '@typesugar/core': file:vendor/typesugar/typesugar-core-0.1.1-be4286d3.tgz(typescript@5.9.3)
+      '@typesugar/derive': file:vendor/typesugar/typesugar-derive-0.1.1-be4286d3.tgz(typescript@5.9.3)
+      '@typesugar/macros': file:vendor/typesugar/typesugar-macros-0.1.1-be4286d3.tgz(typescript@5.9.3)
+      '@typesugar/reflect': file:vendor/typesugar/typesugar-reflect-0.1.1-be4286d3.tgz(typescript@5.9.3)
+      '@typesugar/transformer': file:vendor/typesugar/typesugar-transformer-0.1.1-be4286d3.tgz(typescript@5.9.3)
+      '@typesugar/type-system': file:vendor/typesugar/typesugar-type-system-0.1.1-be4286d3.tgz(typescript@5.9.3)
+      '@typesugar/typeclass': file:vendor/typesugar/typesugar-typeclass-0.1.1-be4286d3.tgz(typescript@5.9.3)
+      unplugin-typesugar: file:vendor/typesugar/unplugin-typesugar-0.1.1-be4286d3.tgz(rollup@4.62.2)(typescript@5.9.3)
     optionalDependencies:
       typescript: 5.9.3
     transitivePeerDependencies:
@@ -18308,12 +18326,12 @@ snapshots:
 
   universalify@2.0.1: {}
 
-  unplugin-typesugar@file:vendor/typesugar/unplugin-typesugar-0.1.1-0411491c.tgz(rollup@4.62.2)(typescript@5.9.3):
+  unplugin-typesugar@file:vendor/typesugar/unplugin-typesugar-0.1.1-be4286d3.tgz(rollup@4.62.2)(typescript@5.9.3):
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@rollup/pluginutils': 5.4.0(rollup@4.62.2)
-      '@typesugar/core': file:vendor/typesugar/typesugar-core-0.1.1-0411491c.tgz(typescript@5.9.3)
-      '@typesugar/transformer': file:vendor/typesugar/typesugar-transformer-0.1.1-0411491c.tgz(typescript@5.9.3)
+      '@typesugar/core': file:vendor/typesugar/typesugar-core-0.1.1-be4286d3.tgz(typescript@5.9.3)
+      '@typesugar/transformer': file:vendor/typesugar/typesugar-transformer-0.1.1-be4286d3.tgz(typescript@5.9.3)
       typescript: 5.9.3
       unplugin: 2.3.11
     transitivePeerDependencies:

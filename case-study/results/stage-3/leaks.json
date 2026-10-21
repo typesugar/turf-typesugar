@@ -1,0 +1,39 @@
+{
+  "scanned": {
+    "js": 231,
+    "dts": 230,
+    "map": 230,
+    "other": 0
+  },
+  "hits": {
+    "js": [],
+    "dts": [],
+    "map": [
+      {
+        "file": "packages/turf-helpers/dist/cjs/index.cjs.map",
+        "specifiers": [
+          "@typesugar/validate"
+        ]
+      },
+      {
+        "file": "packages/turf-helpers/dist/esm/index.js.map",
+        "specifiers": [
+          "@typesugar/validate"
+        ]
+      },
+      {
+        "file": "packages/turf-meta/dist/cjs/index.cjs.map",
+        "specifiers": [
+          "@typesugar/std"
+        ]
+      },
+      {
+        "file": "packages/turf-meta/dist/esm/index.js.map",
+        "specifiers": [
+          "@typesugar/std"
+        ]
+      }
+    ],
+    "other": []
+  }
+}
